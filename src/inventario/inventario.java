@@ -30,10 +30,10 @@ public class inventario
 	public static final String SEPARATOR=",";
 	public static final String QUOTE=",";
 	public static int registros = 0;
-	public static String url = "jdbc:postgresql://10.1.250.20:5932/openbravo";
-	public static String inventarios= "jdbc:postgresql://10.1.250.24:5932/inventarios_c5";
-	//public static String url= "jdbc:postgresql://201.149.89.163:5932/openbravo";
-	//public static String inventarios= "jdbc:postgresql://201.149.89.164:5932/inventarios";
+	//public static String url = "jdbc:postgresql://10.1.250.20:5932/openbravo";
+	//public static String inventarios= "jdbc:postgresql://10.1.250.24:5932/inventarios_c5";
+	public static String url= "jdbc:postgresql://201.149.89.163:5932/openbravo";
+	public static String inventarios= "jdbc:postgresql://201.149.89.164:5932/inventarios_c5";
 	public static String usuario="postgres";
 	public static String contra="s3st2m1s4e";
 	public static int fecha=0;

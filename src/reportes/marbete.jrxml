@@ -17,7 +17,7 @@ when char_length(ub.marbete) = 3 then ('000'||ub.marbete)
 when char_length(ub.marbete) = 4 then ('00'||ub.marbete)
 when char_length(ub.marbete) = 5 then ('0'||ub.marbete) else ub.marbete end as folio,to_char(now(),'DD-MM-YYYY HH:MI:SS')
  FROM ubicaciones AS ub
-WHERE ub.almacen similar to ($P{almacenes})
+WHERE ub.marbete similar to ('16231|16169|16309|16168|16291|16143|16163|16297|16203|16235|16273|16127|16317|16219|16250|16320|16243|16135|16204|16124|16313|16210|16310|16224|16333|16311|16211|16328|16326|16322|16227|16316|16251|16155|16324|16186|16267|16128|16314|16228|16216|16308|16164|16120|16323|16272|16183|16325|16171|16236|16247|16318|16223|16302|16151|16331|16327|16220|16278|16215|16330|16312|16232|16167|16332|16319|16187|16159|16179|16212|16144|16284|16315|16202|16182|16321|16195|16240|16191|16246')
 ORDER BY marbete::numeric]]>
 	</queryString>
 	<field name="almacen" class="java.lang.String"/>

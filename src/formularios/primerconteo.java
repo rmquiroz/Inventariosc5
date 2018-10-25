@@ -505,7 +505,7 @@ public class primerconteo extends JFrame {
 				String codigo= txtcodigo.getText();
 				String marbete= txtbuscar.getText();
 				//String cantidad= txtcantidad.getText();
-				int cantidad= Integer.parseInt(txtcantidad.getText());
+				double cantidad= Double.parseDouble(txtcantidad.getText());
 				String ubicacion= txtubicacion.getText();
 				String almacen= txtalmacen.getText();
 				String atributo= choice.getSelectedItem();
@@ -527,7 +527,7 @@ public class primerconteo extends JFrame {
 				} else if(marbete.isEmpty()) {
 					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Marbete");
 				//} else if(String.valueOf(Integer.parseInt(txtcantidad.getText())) != null) {
-				} else if(String.valueOf(Integer.parseInt(txtcantidad.getText())).isEmpty()) {
+				} else if(String.valueOf(Double.parseDouble(txtcantidad.getText())).isEmpty()) {
 					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Cantidad");
 				} else {
 				Connection con = null;
@@ -617,7 +617,7 @@ public class primerconteo extends JFrame {
 				String marbete= txtbuscar.getText();
 				String atributo=choice.getSelectedItem();
 				//String cantidad= txtcantidad.getText();
-				int cantidad= Integer.parseInt(txtcantidad.getText());
+				double cantidad= Double.parseDouble(txtcantidad.getText());
 				String ubicacion= txtubicacion.getText();
 				String almacen= txtalmacen.getText();
 				
@@ -636,7 +636,7 @@ public class primerconteo extends JFrame {
 				} else if(marbete.isEmpty()) {
 					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Marbete");
 				//} else if(String.valueOf(Integer.parseInt(txtcantidad.getText())) != null) {
-				} else if(String.valueOf(Integer.parseInt(txtcantidad.getText())).isEmpty()) {
+				} else if(String.valueOf(Double.parseDouble(txtcantidad.getText())).isEmpty()) {
 					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Cantidad");
 				} else {
 				Connection con = null;
