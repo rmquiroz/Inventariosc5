@@ -127,77 +127,26 @@ public class MarbetesTercero extends JFrame {
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setBackground(Color.WHITE);
 		JButton btnGenerarMarbete = new JButton("Generar PDF");
-		
-		final JCheckBox brandsEUA_chbx = new JCheckBox("4E BRANDS EUA");
-		brandsEUA_chbx.setBackground(Color.BLACK);
-		brandsEUA_chbx.setForeground(Color.WHITE);
-		final JCheckBox etiquetas_chbx = new JCheckBox("4G_1D ETIQUETAS");
-		etiquetas_chbx.setBackground(Color.BLACK);
-		etiquetas_chbx.setForeground(Color.WHITE);
-		final JCheckBox mp_chbx = new JCheckBox("4G_1D MP");
-		mp_chbx.setBackground(Color.BLACK);
-		mp_chbx.setForeground(Color.WHITE);
-		final JCheckBox quimicos_chbx = new JCheckBox("4G_1F QUIMICOS");
-		quimicos_chbx.setBackground(Color.BLACK);
-		quimicos_chbx.setForeground(Color.WHITE);
-		final JCheckBox smoMP_chbx = new JCheckBox("SMO_MATERIA PRIMA");
-		smoMP_chbx.setBackground(Color.BLACK);
-		smoMP_chbx.setForeground(Color.WHITE);
 		final JCheckBox c5_chbx = new JCheckBox("PRINCIPAL_C5");
 		c5_chbx.setBackground(Color.BLACK);
 		c5_chbx.setForeground(Color.WHITE);
-		final JCheckBox mpPlanta_chbx = new JCheckBox("MP_PLANTA 2C");
-		mpPlanta_chbx.setBackground(Color.BLACK);
-		mpPlanta_chbx.setForeground(Color.WHITE);
-		final JCheckBox mpPlanta_chbxB = new JCheckBox("MP_PLANTA 2B");
-		mpPlanta_chbxB.setBackground(Color.BLACK);
-		mpPlanta_chbxB.setForeground(Color.WHITE);
-		final JCheckBox smoPT_chbx = new JCheckBox("SMO_J1_PT");
-		smoPT_chbx.setBackground(Color.BLACK);
-		smoPT_chbx.setForeground(Color.WHITE);
 		JLabel lblNewLabel_5 = new JLabel("");
 		lblNewLabel_5.setForeground(Color.WHITE);
-		
-		brandsEUA_chbx.setFont(new Font("Dialog", Font.BOLD, 14));
-		etiquetas_chbx.setFont(new Font("Dialog", Font.BOLD, 14));
-		mp_chbx.setFont(new Font("Dialog", Font.BOLD, 14));
-		quimicos_chbx.setFont(new Font("Dialog", Font.BOLD, 14));
-		smoMP_chbx.setFont(new Font("Dialog", Font.BOLD, 14));
 		c5_chbx.setFont(new Font("Dialog", Font.BOLD, 14));
-		mpPlanta_chbx.setFont(new Font("Dialog", Font.BOLD, 14));
-		mpPlanta_chbxB.setFont(new Font("Dialog", Font.BOLD, 14));
-		smoPT_chbx.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 30));
 		btnGenerarMarbete.setFont(new Font("Candara", Font.PLAIN, 14));
-		
-		brandsEUA_chbx.setBounds(48, 96, 210, 23);
-		etiquetas_chbx.setBounds(48, 142, 210, 23);
-		mp_chbx.setBounds(48, 188, 210, 23);
-		quimicos_chbx.setBounds(48, 235, 210, 23);
-		smoMP_chbx.setBounds(453, 235, 210, 23);
-		c5_chbx.setBounds(453, 142, 210, 23);
-		mpPlanta_chbx.setBounds(453, 96, 210, 23);		
-		smoPT_chbx.setBounds(453, 188, 210, 23);
+		c5_chbx.setBounds(23, 190, 241, 133);
 		lblNewLabel.setBounds(0, 32, 855, 39);
 		btnGenerarMarbete.setBounds(624, 367, 155, 23);
 		lblNewLabel_5.setBounds(0, 0, 855, 429);
-		mpPlanta_chbxB.setBounds(453, 116, 210, 23);
 		
 		btnGenerarMarbete.setVerticalAlignment(SwingConstants.TOP);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
 		lblNewLabel_5.setIcon(new ImageIcon(generarmarbete.class.getResource("/imagenes/fondo.jpg")));
 
-		contentPane.add(btnGenerarMarbete);		
-		contentPane.add(brandsEUA_chbx);		
-		contentPane.add(etiquetas_chbx);		
-		contentPane.add(mp_chbx);		
-		contentPane.add(quimicos_chbx);		
-		contentPane.add(smoMP_chbx);		
-		contentPane.add(c5_chbx);		
-		contentPane.add(mpPlanta_chbx);	
-		contentPane.add(mpPlanta_chbxB);	
-		contentPane.add(smoPT_chbx);		
+		contentPane.add(btnGenerarMarbete);
+		contentPane.add(c5_chbx);
 		contentPane.add(lblNewLabel);
 		contentPane.add(lblNewLabel_5);
 		
@@ -205,28 +154,10 @@ public class MarbetesTercero extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				
-			if(smoPT_chbx.isSelected() || mpPlanta_chbx.isSelected() || c5_chbx.isSelected() 
-					|| smoMP_chbx.isSelected() || quimicos_chbx.isSelected()||mpPlanta_chbxB.isSelected() 
-					|| mp_chbx.isSelected() || etiquetas_chbx.isSelected() || brandsEUA_chbx.isSelected())
+			if(c5_chbx.isSelected())
 			{
-				if(smoPT_chbx.isSelected())
-					almacenes = almacenes + "|" + smoPT_chbx.getText();
-				if(mpPlanta_chbx.isSelected())
-					almacenes = almacenes + "|" + mpPlanta_chbx.getText();
-				if(mpPlanta_chbxB.isSelected())
-					almacenes = almacenes + "|" + mpPlanta_chbxB.getText();
 				if(c5_chbx.isSelected())
 					almacenes = almacenes + "|" + c5_chbx.getText();
-				if(smoMP_chbx.isSelected())
-					almacenes = almacenes + "|" + smoMP_chbx.getText();
-				if(quimicos_chbx.isSelected())
-					almacenes = almacenes + "|" + quimicos_chbx.getText();
-				if(mp_chbx.isSelected())
-					almacenes = almacenes + "|" + mp_chbx.getText();
-				if(etiquetas_chbx.isSelected())
-					almacenes = almacenes + "|" + etiquetas_chbx.getText();
-				if(brandsEUA_chbx.isSelected())
-					almacenes = almacenes + "|" + brandsEUA_chbx.getText();				
 				System.out.println(almacenes);
 				if(almacenes.charAt(0)=='|')
 					almacenes=""+almacenes.substring(1, almacenes.length())+"";
