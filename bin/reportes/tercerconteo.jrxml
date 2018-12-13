@@ -15,7 +15,9 @@ when char_length(marbete) = 2 then ('0000'||marbete)
 when char_length(marbete) = 3 then ('000'||marbete)
 when char_length(marbete) = 4 then ('00'||marbete)
 when char_length(marbete) = 5 then ('0'||marbete) else marbete end as folio,to_char(now(),'DD-MM-YYYY')
- FROM tercerconteo WHERE almacen similar to ($P{almacenes})]]>
+ FROM tercerconteo
+WHERE ubicacion similar to ('A-1-B|A-2-B|A-3-A|A-3-B|A-5-A|B-1-A|B-1-B|B-3-A|B-4-A|B-5-A|B-6-A|B-6-B|BUFFER_MP_C5|BUFFER_PT_C5|BUFFER_TIN_C5|C-1-B|C-3-B|C-4-A|C-4-B|C-5-A|C-5-B|C-6-B|CP-02-B|CP-02-C|CP-02-D|CP_MP|CP-MP-3|CP-MP-4|CP-MP-5|D-1-A|D-1-B|D-2-A|D-2-B|D-3-A|D-3-B|D-4-A|D-4-B|D-5-A|D-5-B|D-6-A|D-6-B|DEVOLUCION_MP_C5|E-1-B|E-2-A|E-2-B|E-3-A|E-3-B|F-1-B|F-2-A|F-2-B|F-3-A|F-4-A|F-5-B|F-6-B|INTERMEDIO|RECHA_PT_C5|TIN-01-A|TIN-01-B|TIN-01-C|TIN-01-D|TIN-02-A|TIN-02-B|TIN-02-C|TIN-02-D|TIN-03-A|TIN-03-B|TIN-03-C|TIN-03-D|TIN-04-A|TIN-04-B|TIN-04-C|TIN-04-D|TIN-05-A|TIN-05-B|TIN-05-C|TIN-05-D|XK-01-B|XK-01-C|XK-01-D|XK-01-E')
+ORDER BY marbete::numeric]]>
 	</queryString>
 	<field name="almacen" class="java.lang.String"/>
 	<field name="ubicacion" class="java.lang.String"/>
@@ -26,64 +28,9 @@ when char_length(marbete) = 5 then ('0'||marbete) else marbete end as folio,to_c
 	</background>
 	<detail>
 		<band height="575">
-			<image hAlign="Center">
-				<reportElement uuid="f752635c-70e8-4f30-bd3a-ff08e7eae8be" positionType="FixRelativeToBottom" x="0" y="0" width="750" height="575"/>
-				<imageExpression><![CDATA[$P{IMG_DIR}+"\\4E-DESARROLLODESISTEMAS.png"]]></imageExpression>
-			</image>
 			<rectangle>
 				<reportElement uuid="82c5d544-ecb7-4b92-aaba-3954520634f1" x="0" y="0" width="752" height="574"/>
 			</rectangle>
-			<line>
-				<reportElement uuid="f5634c1b-fc7d-41b4-aeef-750ba1e23056" x="280" y="21" width="471" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="ba7a0c1f-6504-4886-b90b-95f6b9d7fdbf" x="280" y="41" width="471" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="dca682cd-1567-40cd-acfc-6edc339f4341" x="280" y="61" width="471" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="282041b8-0b9c-4bf0-a2dc-e1cf4beedb86" x="280" y="81" width="471" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="4edec85f-99b0-4a82-8d38-fd1cdd35675f" x="110" y="101" width="640" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="9b039dbf-c706-497e-9c77-9d92c68cad0f" x="280" y="121" width="471" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="603865ee-ab3f-4e0f-9364-d2f107343b0e" x="281" y="141" width="469" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="b58df50c-6846-41dd-863f-b7258845eb4b" x="280" y="161" width="471" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="e7740556-3def-47cb-b1ab-19bdbb01c353" x="280" y="181" width="470" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="6aff4cb4-1d2e-4ded-9e61-6ea2eef57637" x="280" y="201" width="471" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="51d1cd3f-9895-4503-a1a6-646120db9f0e" x="110" y="221" width="640" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="b6dbc987-a07c-4ea6-95af-e9f0efe1fab0" x="280" y="241" width="471" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="e69910c7-e9d0-4fb1-b9d9-7f0d233d2dc1" x="280" y="261" width="471" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="37abe38f-a840-437b-827e-8e2a9d6576e9" x="280" y="281" width="470" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="8737cf15-72fa-477f-bbef-95f747439edc" x="280" y="301" width="471" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="57762925-4167-4a79-af7e-8dc0b38b0691" x="280" y="321" width="471" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="6f81ce6c-5bfb-494b-a096-902c3a55488e" x="111" y="502" width="640" height="1"/>
-			</line>
 			<staticText>
 				<reportElement uuid="8a0e10dd-bd40-439d-bfa5-97159ef85987" x="280" y="0" width="200" height="22"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -92,25 +39,46 @@ when char_length(marbete) = 5 then ('0'||marbete) else marbete end as folio,to_c
 				<text><![CDATA[CÓDIGO]]></text>
 			</staticText>
 			<line>
+				<reportElement uuid="4edec85f-99b0-4a82-8d38-fd1cdd35675f" x="110" y="143" width="640" height="1"/>
+			</line>
+			<line>
 				<reportElement uuid="b1fc8ce4-2ea4-4abc-92cd-86a576d59bbf" x="570" y="22" width="1" height="481"/>
+			</line>
+			<line>
+				<reportElement uuid="6f81ce6c-5bfb-494b-a096-902c3a55488e" x="110" y="503" width="640" height="1"/>
 			</line>
 			<line>
 				<reportElement uuid="37aeb963-161f-4f0a-97e1-558bdd41524b" x="360" y="22" width="1" height="481"/>
 			</line>
 			<line>
+				<reportElement uuid="ba7a0c1f-6504-4886-b90b-95f6b9d7fdbf" x="280" y="54" width="471" height="1"/>
+			</line>
+			<line>
 				<reportElement uuid="21d23d06-5dce-4a5d-90e8-878f6cd1ed82" x="109" y="0" width="1" height="573"/>
 			</line>
 			<line>
-				<reportElement uuid="ee78bac6-650e-482a-aec6-441e67c114f6" x="279" y="0" width="1" height="574"/>
+				<reportElement uuid="f5634c1b-fc7d-41b4-aeef-750ba1e23056" x="280" y="21" width="471" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="ee78bac6-650e-482a-aec6-441e67c114f6" x="279" y="0" width="1" height="503"/>
+			</line>
+			<line>
+				<reportElement uuid="57762925-4167-4a79-af7e-8dc0b38b0691" x="280" y="474" width="471" height="1"/>
 			</line>
 			<line>
 				<reportElement uuid="19af3ea4-a42f-417c-89c0-b0061dcde51a" x="420" y="22" width="1" height="481"/>
+			</line>
+			<line>
+				<reportElement uuid="37abe38f-a840-437b-827e-8e2a9d6576e9" x="280" y="414" width="470" height="1"/>
 			</line>
 			<line>
 				<reportElement uuid="29af3264-e8bd-4d31-ac22-eaeb6f0e0559" x="480" y="0" width="1" height="504"/>
 				<graphicElement>
 					<pen lineWidth="2.0"/>
 				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="8737cf15-72fa-477f-bbef-95f747439edc" x="280" y="443" width="471" height="1"/>
 			</line>
 			<line>
 				<reportElement uuid="67372c2f-30f7-4d5a-ae8d-d5f8beea18f8" x="526" y="22" width="1" height="481"/>
@@ -122,7 +90,16 @@ when char_length(marbete) = 5 then ('0'||marbete) else marbete end as folio,to_c
 				</graphicElement>
 			</line>
 			<line>
+				<reportElement uuid="dca682cd-1567-40cd-acfc-6edc339f4341" x="279" y="83" width="472" height="1"/>
+			</line>
+			<line>
 				<reportElement uuid="db5a0a57-194e-46d6-86e8-d99302895140" x="450" y="22" width="1" height="481"/>
+			</line>
+			<line>
+				<reportElement uuid="fa718aca-9047-4f3f-9176-dc459c68100d" x="211" y="504" width="1" height="69"/>
+			</line>
+			<line>
+				<reportElement uuid="282041b8-0b9c-4bf0-a2dc-e1cf4beedb86" x="280" y="114" width="471" height="1"/>
 			</line>
 			<line>
 				<reportElement uuid="01297a6a-63ba-4ddc-bf0a-44c7d7151f82" x="300" y="22" width="1" height="481"/>
@@ -133,6 +110,27 @@ when char_length(marbete) = 5 then ('0'||marbete) else marbete end as folio,to_c
 			<line>
 				<reportElement uuid="f83e4b8d-932a-4944-ad6a-361884db94f8" x="390" y="22" width="1" height="481"/>
 			</line>
+			<staticText>
+				<reportElement uuid="3e48cedf-cf24-48f3-9c96-358c51df8c6a" x="305" y="519" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[CM2 - Centímetros Cuadrados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="97f684da-a057-4acd-9246-aac3b1d2be38" x="394" y="548" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[LT - Litro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e49f2638-a29c-4cc7-bf64-2a5369e3c191" x="483" y="548" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[M2 - Metros Cuadrados]]></text>
+			</staticText>
 			<staticText>
 				<reportElement uuid="c33dcea1-875e-4712-bba7-e24a7cf9ef99" x="111" y="326" width="167" height="88"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -148,11 +146,39 @@ when char_length(marbete) = 5 then ('0'||marbete) else marbete end as folio,to_c
 				<text><![CDATA[ALMACÉN]]></text>
 			</staticText>
 			<staticText>
+				<reportElement uuid="dadc588f-8e06-4769-a0f2-95f95fb46b2d" x="111" y="504" width="101" height="71"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nomenclaturas de UOM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1e1ce0df-37ae-4c6a-84f8-90d49a256375" x="483" y="519" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[M - Metro]]></text>
+			</staticText>
+			<staticText>
 				<reportElement uuid="38a7b8cb-a9a5-4cbd-a005-2ed8ba5c0e3e" x="480" y="0" width="136" height="22"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[UOM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3d23361e-1731-41f8-b0bc-7fc7578aff2e" x="661" y="548" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[RLL - Rollo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ada9d144-bc2b-4cc6-8d3d-3ef62cf7ecbe" x="572" y="548" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PLL - Pallet]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="b605754a-cc1a-48a5-881d-d497829a63cb" x="616" y="0" width="136" height="22"/>
@@ -162,11 +188,32 @@ when char_length(marbete) = 5 then ('0'||marbete) else marbete end as folio,to_c
 				<text><![CDATA[CANTIDAD]]></text>
 			</staticText>
 			<staticText>
+				<reportElement uuid="64ed1612-aee8-4d85-865b-1c48fdd779cb" x="394" y="519" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[KG - Kilogramo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="320af9d2-9554-454a-803f-d40ebdc20830" x="305" y="548" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[HJ - Hoja]]></text>
+			</staticText>
+			<staticText>
 				<reportElement uuid="27734285-af31-4875-ae24-43c474f54c19" x="0" y="0" width="109" height="83"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MARBETE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fff1bedf-7e4b-4da3-a564-69f7b259cc89" x="216" y="519" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[BOB - Bobina]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="8a463d85-72c4-4a11-b099-718ae54911f8" x="111" y="0" width="167" height="143"/>
@@ -176,7 +223,14 @@ when char_length(marbete) = 5 then ('0'||marbete) else marbete end as folio,to_c
 				<text><![CDATA[TERCER CONTEO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="dc6265c5-3df5-4dda-ab18-9f0f7b211494" x="281" y="22" width="20" height="20"/>
+				<reportElement uuid="5458e85c-c46d-49ec-a55a-75c26aba2c71" x="216" y="548" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[CJ - Caja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc6265c5-3df5-4dda-ab18-9f0f7b211494" x="281" y="24" width="20" height="30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -299,6 +353,13 @@ when char_length(marbete) = 5 then ('0'||marbete) else marbete end as folio,to_c
 				<textFieldExpression><![CDATA[$F{almacen}]]></textFieldExpression>
 			</textField>
 			<staticText>
+				<reportElement uuid="52ae1611-8b80-4fc3-ad04-594c0e2d6c79" x="661" y="519" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PZ - Pieza]]></text>
+			</staticText>
+			<staticText>
 				<reportElement uuid="8510f028-85a0-42fb-8f45-f7a99e7105e8" x="281" y="294" width="20" height="30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
@@ -313,31 +374,52 @@ when char_length(marbete) = 5 then ('0'||marbete) else marbete end as folio,to_c
 				<textFieldExpression><![CDATA[$F{folio}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="df87f211-6128-4ddb-a417-96f18e4d371d" x="110" y="504" width="170" height="39"/>
+				<reportElement uuid="e9c29bc3-6a64-4b8a-88e6-258f93960847" x="572" y="519" width="89" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PCA - Placa]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="b6dbc987-a07c-4ea6-95af-e9f0efe1fab0" x="280" y="352" width="471" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="e69910c7-e9d0-4fb1-b9d9-7f0d233d2dc1" x="280" y="383" width="471" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="51d1cd3f-9895-4503-a1a6-646120db9f0e" x="110" y="323" width="640" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="b58df50c-6846-41dd-863f-b7258845eb4b" x="280" y="234" width="471" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="6aff4cb4-1d2e-4ded-9e61-6ea2eef57637" x="280" y="294" width="471" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="e7740556-3def-47cb-b1ab-19bdbb01c353" x="280" y="264" width="470" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="603865ee-ab3f-4e0f-9364-d2f107343b0e" x="281" y="204" width="469" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="9b039dbf-c706-497e-9c77-9d92c68cad0f" x="280" y="174" width="471" height="1"/>
+			</line>
+			<image hAlign="Center">
+				<reportElement uuid="f752635c-70e8-4f30-bd3a-ff08e7eae8be" positionType="FixRelativeToBottom" x="0" y="0" width="750" height="575"/>
+				<imageExpression><![CDATA[$P{IMG_DIR}+"\\4E-DESARROLLODESISTEMAS.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="df87f211-6128-4ddb-a417-96f18e4d371d" x="17" y="556" width="32" height="18"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="f0d263f9-9b99-47a1-ae94-7f265fc254bf" x="111" y="543" width="167" height="32"/>
+				<reportElement uuid="f0d263f9-9b99-47a1-ae94-7f265fc254bf" x="49" y="556" width="60" height="18"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{to_char}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement uuid="1d54750c-81d5-4538-bf56-67322a461b07" x="280" y="504" width="20" height="30"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[16.-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="ec6213dd-fa6f-41f7-8678-a57959d34efe" x="279" y="534" width="20" height="30"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[16.-]]></text>
-			</staticText>
 		</band>
 	</detail>
 </jasperReport>

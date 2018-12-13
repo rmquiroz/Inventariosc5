@@ -17,7 +17,6 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.internet.AddressException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date; 
 /**
  * A utility class for sending e-mail messages
  * @author www.codejava.net
@@ -73,13 +72,13 @@ public class EmailUtility {
         msg.setFrom(new InternetAddress("informesob3@4eglobal.com"));
         //ogutierrez@kcc.com
         msg.addRecipient(Message.RecipientType.TO, new InternetAddress("sistemaserp@4eglobal.com"));
-        msg.addRecipient(Message.RecipientType.TO, new InternetAddress("lmartinez@4eglobal.com"));
-        msg.addRecipient(Message.RecipientType.TO, new InternetAddress("ogutierrez@kcc.com"));
-        msg.addRecipient(Message.RecipientType.TO, new InternetAddress("jfarias@4eglobal.com"));
-        msg.addRecipient(Message.RecipientType.TO, new InternetAddress("jpgomez@4eglobal.com"));
-        msg.addRecipient(Message.RecipientType.TO, new InternetAddress("lcao@4eglobal.com"));
-        msg.addRecipient(Message.RecipientType.TO, new InternetAddress("jvelazquez@4eglobal.com"));
-        msg.addRecipient(Message.RecipientType.TO, new InternetAddress("jcgonzalez@4eglobal.com"));
+  //      msg.addRecipient(Message.RecipientType.TO, new InternetAddress("lmartinez@4eglobal.com"));
+    //    msg.addRecipient(Message.RecipientType.TO, new InternetAddress("ogutierrez@kcc.com"));
+      //  msg.addRecipient(Message.RecipientType.TO, new InternetAddress("jfarias@4eglobal.com"));
+        //msg.addRecipient(Message.RecipientType.TO, new InternetAddress("jpgomez@4eglobal.com"));
+//        msg.addRecipient(Message.RecipientType.TO, new InternetAddress("lcao@4eglobal.com"));
+  //      msg.addRecipient(Message.RecipientType.TO, new InternetAddress("jvelazquez@4eglobal.com"));
+    //    msg.addRecipient(Message.RecipientType.TO, new InternetAddress("jcgonzalez@4eglobal.com"));
         msg.setSubject("PARALIZA ALMACEN(ES)"+alm);                                   
         msg.setContent(multiParte);
 

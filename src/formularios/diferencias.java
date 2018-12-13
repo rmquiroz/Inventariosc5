@@ -1,5 +1,4 @@
 package formularios;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -29,8 +28,8 @@ import java.awt.Insets;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 
-import confirmaconteos.confirmarconteos;
-
+import confirmarconteos.ConfirmarConteosPrueba;
+import diferenciasC.diferenciasC;
 public class diferencias extends JFrame {
 
 	/**
@@ -102,28 +101,101 @@ public class diferencias extends JFrame {
 		contentPane.setBackground(SystemColor.inactiveCaption);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		contentPane.setLayout(null);		
+	
+		final JCheckBox BRANDSEUA = new JCheckBox("4E BRANDS EUA");
+		BRANDSEUA.setFont(new Font("Dialog", Font.BOLD, 12));
+		final JCheckBox ETIQUETAS = new JCheckBox("4G_1D ETIQUETAS");
+		ETIQUETAS.setFont(new Font("Dialog", Font.BOLD, 12));
+		final JCheckBox UDMP = new JCheckBox("4G_1D MP");
+		UDMP.setFont(new Font("Dialog", Font.BOLD, 12));
+		final JCheckBox QUIMICOS = new JCheckBox("4G_1F QUIMICOS");
+		QUIMICOS.setFont(new Font("Dialog", Font.BOLD, 12));
+		final JCheckBox MPPLANTA = new JCheckBox("MP_PLANTA 2C");
+		MPPLANTA.setFont(new Font("Dialog", Font.BOLD, 12));
+		final JCheckBox MPPLANTAB = new JCheckBox("MP_PLANTA 2B");
+		MPPLANTAB.setFont(new Font("Dialog", Font.BOLD, 12));
 		final JCheckBox PRINCIPAL_C5 = new JCheckBox("PRINCIPAL_C5");
 		PRINCIPAL_C5.setFont(new Font("Dialog", Font.BOLD, 12));
+		final JCheckBox SMO_J1_PT = new JCheckBox("SMO_J1_PT");
+		SMO_J1_PT.setFont(new Font("Dialog", Font.BOLD, 12));
+		final JCheckBox SMO_MATERIA = new JCheckBox("SMO_MATERIA PRIMA");
+		SMO_MATERIA.setFont(new Font("Dialog", Font.BOLD, 12));
+		
+		BRANDSEUA.setBackground(Color.BLACK);
+		BRANDSEUA.setForeground(Color.WHITE);
+		BRANDSEUA.setBounds(23, 150, 168, 23);
+		contentPane.add(BRANDSEUA);		
+		
+		ETIQUETAS.setBackground(Color.BLACK);
+		ETIQUETAS.setForeground(Color.WHITE);
+		ETIQUETAS.setBounds(23,180, 168, 23);		
+		contentPane.add(ETIQUETAS);		
+		
+		UDMP.setBackground(Color.BLACK);
+		UDMP.setForeground(Color.WHITE);
+		UDMP.setBounds(23,210, 168, 23);
+		contentPane.add(UDMP);		
+		
+		QUIMICOS.setBackground(Color.BLACK);
+		QUIMICOS.setForeground(Color.WHITE);
+		QUIMICOS.setBounds(23,240, 168, 23);		
+		contentPane.add(QUIMICOS);
+		
+		MPPLANTA.setBackground(Color.BLACK);
+		MPPLANTA.setForeground(Color.WHITE);
+		MPPLANTA.setBounds(23,270, 168, 23);
+		contentPane.add(MPPLANTA);
 				
 		PRINCIPAL_C5.setBackground(Color.BLACK);
 		PRINCIPAL_C5.setForeground(Color.WHITE);
-		PRINCIPAL_C5.setBounds(23,258, 229, 65);		
-		contentPane.add(PRINCIPAL_C5);
+		PRINCIPAL_C5.setBounds(23,300, 168, 23);		
+		contentPane.add(PRINCIPAL_C5);		
+		
+		SMO_J1_PT.setBackground(Color.BLACK);
+		SMO_J1_PT.setForeground(Color.WHITE);
+		SMO_J1_PT.setBounds(23,330, 168, 23);
+		contentPane.add(SMO_J1_PT);		
+		
+		SMO_MATERIA.setBackground(Color.BLACK);
+		SMO_MATERIA.setForeground(Color.WHITE);
+		SMO_MATERIA.setBounds(23,360, 168, 23);		
+		contentPane.add(SMO_MATERIA);
+		
+		MPPLANTAB.setBackground(Color.BLACK);
+		MPPLANTAB.setForeground(Color.WHITE);
+		MPPLANTAB.setBounds(23,390, 168, 23);
+		contentPane.add(MPPLANTAB);
 		
 		
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setFont(new Font("Dialog", Font.PLAIN, 14));
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			if(PRINCIPAL_C5.isSelected()){
+			if(BRANDSEUA.isSelected() || UDMP.isSelected() || QUIMICOS.isSelected() || MPPLANTA.isSelected() || 
+PRINCIPAL_C5.isSelected() || SMO_J1_PT.isSelected() || SMO_MATERIA.isSelected() || ETIQUETAS.isSelected()){
 				almacenes="";
+				if(BRANDSEUA.isSelected())
+					almacenes=almacenes+"|"+BRANDSEUA.getText();
+				if(UDMP.isSelected())
+					almacenes=almacenes+"|"+UDMP.getText();
+				if(QUIMICOS.isSelected())
+					almacenes=almacenes+"|"+QUIMICOS.getText();
+				if(MPPLANTA.isSelected())
+					almacenes=almacenes+"|"+MPPLANTA.getText();
+				if(MPPLANTAB.isSelected())
+					almacenes=almacenes+"|"+MPPLANTAB.getText();
 				if(PRINCIPAL_C5.isSelected())
 					almacenes=almacenes+"|"+PRINCIPAL_C5.getText();
+				if(SMO_J1_PT.isSelected())
+					almacenes=almacenes+"|"+SMO_J1_PT.getText();
+				if(SMO_MATERIA.isSelected())
+					almacenes=almacenes+"|"+SMO_MATERIA.getText();
+				if(ETIQUETAS.isSelected())
+					almacenes=almacenes+"|"+ETIQUETAS.getText();
 				almacenes=almacenes.substring(1);
-				System.out.println("Variable:"+almacenes);
-				diferenciasC.diferenciasC i=new diferenciasC.diferenciasC();	
-				String validacion=i.main(almacenes,"");
+				System.out.println("Variable:"+almacenes);				
+				String validacion=diferenciasC.main(almacenes,"");
 				JOptionPane.showMessageDialog(contentPane,validacion);
 				if(!validacion.equals("HAY HUECOS FALTANTES POR CONTABILIZAR")){
 				int a=JOptionPane.showConfirmDialog(contentPane,"¿Quiere confirmar los conteos?","Esta verificación no puede revertirse ni repetirse",JOptionPane.YES_NO_OPTION);
@@ -148,9 +220,9 @@ public class diferencias extends JFrame {
 						}	
 						if(a==0)
 						{
-							confirmaconteos.confirmarconteos co=new confirmaconteos.confirmarconteos();
-							JOptionPane.showMessageDialog(contentPane,co.main(almacenes));
-							JOptionPane.showMessageDialog(contentPane,i.GeneraTercer(almacenes));							
+					
+							JOptionPane.showMessageDialog(contentPane,ConfirmarConteosPrueba.main(almacenes));
+							JOptionPane.showMessageDialog(contentPane,diferenciasC.GeneraTercer(almacenes));							
 						}
 						if(a==1)
 						{

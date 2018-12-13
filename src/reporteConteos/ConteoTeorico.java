@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import utilerias.postgresql;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
@@ -23,19 +24,14 @@ import jxl.write.biff.RowsExceededException;
 
 public class ConteoTeorico {
 	static String mensaje;
-	//static String inventarios="jdbc:postgresql://201.149.89.164:5932/inventarios";
-	//static String productivo="jdbc:postgresql://201.149.89.163:5932/openbravo";
-	static String inventarios="jdbc:postgresql://10.1.250.24:5932/inventarios_c5";
-	static String usuario="postgres",contra="s3st2m1s4e";
-	static String productivo="jdbc:postgresql://10.1.250.20:5932/openbravo";
 	static Date date = new Date();
 	static DateFormat hourFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 	public static String main(String almacenes, String repositorio){
 		
 		try {
 			Class.forName("org.postgresql.Driver");
-		Connection cn = DriverManager.getConnection(inventarios, usuario, contra);		  
-		Connection co = DriverManager.getConnection(productivo, usuario, contra);
+		Connection cn = postgresql.getConexion();		  
+		Connection co = postgresql.getConexionOpen();
 		String[] almacen;
 		int h=0;
 		  System.out.println("Ejecutando Query.......");
@@ -45,10 +41,17 @@ public class ConteoTeorico {
 		  for(int x=0;x<almacen.length;x++)
 		  {		
 			  			  
-			  PreparedStatement ps = cn.prepareStatement("SELECT ub.almacen,ub.hueco,ub.MARBETE,CASE WHEN invent.codigo IS NULL THEN 'FALTA CONFIRMACION' ELSE invent.codigo END AS cod, "
-+ "CASE WHEN invent.inventario_piezas IS NULL THEN 'FALTA CONFIRMACION' ELSE (round(invent.inventario_piezas::numeric))::text END AS cant,to_char(invent.fecha,'DD-MM-YYYY') AS "
-+ "fecha_confirmado FROM ubicaciones AS ub LEFT JOIN inventario_teorico AS invent ON ub.hueco=invent.ubicacion WHERE ub.almacen similar to ('"+almacenes+"') ORDER BY almacen,"
-+ "ub.marbete");
+			  PreparedStatement ps = cn.prepareStatement("SELECT ub.almacen,"
++ "ub.hueco,"
++ "ub.MARBETE,"
++ "CASE WHEN invent.codigo IS NULL THEN 'VACIO' ELSE invent.codigo END AS cod,"
++ "CASE WHEN invent.atributo IS NULL THEN 'VACIO' ELSE invent.atributo END AS ATRIBUTO,"
++ "CASE WHEN invent.inventario_piezas IS NULL THEN 'VACIO' ELSE (round(invent.inventario_piezas::numeric))::text END AS cant,"
++ "to_char(invent.fecha,'DD-MM-YYYY') AS fecha_confirmado "
++ "FROM ubicaciones AS ub "
++ "LEFT JOIN inventario_teorico AS invent "
++ "ON ub.hueco=invent.ubicacion "
++ "WHERE ub.almacen similar to ('"+almacen[x]+"') ORDER BY almacen,ub.marbete");
 			  rs = ps.executeQuery();
 			  ArrayList<String> col=new ArrayList<String>(); 
 			  while (rs.next())
@@ -57,6 +60,7 @@ public class ConteoTeorico {
 				  col.add(rs.getString(2));
 				  col.add(rs.getString(3));				
 				  col.add(rs.getString(4));
+				  col.add(rs.getString(5));
 				  rsp=null;
 				  ps=co.prepareStatement("SELECT description FROM m_product WHERE value='"+rs.getString(4)+"'");
 				  rsp=ps.executeQuery();
@@ -65,8 +69,8 @@ public class ConteoTeorico {
 					  col.add(rsp.getString(1));
 				  
 				  }
-				  col.add(rs.getString(5));
-				  col.add(rs.getString(6));				  				  				  
+				  col.add(rs.getString(6));
+				  col.add(rs.getString(7));				  				  				  
 				  col.add("sp");
 			  }			
 			  WritableSheet ws = wb.createSheet("INVENTARIOTEORICO"+almacen[x], h);
@@ -87,6 +91,9 @@ public class ConteoTeorico {
 			  column++;
 			  Label ec4 = new Label(column, row, "CODIGO OB3", cf);
 			  ws.addCell(ec4);
+			  column++;
+			  Label ec8 = new Label(column, row, "ATRIBUTO", cf);
+			  ws.addCell(ec8);
 			  column++;
 			  Label ec5 = new Label(column, row, "DESCRIPCION", cf);
 			  ws.addCell(ec5);

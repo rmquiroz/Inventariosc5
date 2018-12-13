@@ -16,6 +16,7 @@ import java.util.Iterator;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
+import utilerias.postgresql;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
@@ -30,12 +31,7 @@ public class inventario
 	public static final String SEPARATOR=",";
 	public static final String QUOTE=",";
 	public static int registros = 0;
-	//public static String url = "jdbc:postgresql://10.1.250.20:5932/openbravo";
-	//public static String inventarios= "jdbc:postgresql://10.1.250.24:5932/inventarios_c5";
-	public static String url= "jdbc:postgresql://201.149.89.163:5932/openbravo";
-	public static String inventarios= "jdbc:postgresql://201.149.89.164:5932/inventarios_c5";
-	public static String usuario="postgres";
-	public static String contra="s3st2m1s4e";
+	
 	public static int fecha=0;
 	public static String mensaje="";
 	public static int hoy=0;
@@ -47,10 +43,11 @@ public class inventario
   public static String main(String almacenes)
   {
 	  try
-	  {
-		  Class.forName("org.postgresql.Driver");		  
-		  Connection cn = DriverManager.getConnection(url, usuario, contra);
-		  Connection co = DriverManager.getConnection(inventarios, usuario, contra);		  
+	  {		  		  		  
+		  Connection cn = postgresql.getConexionOpen();
+				  //DriverManager.getConnection(url, usuario, contra);
+		  Connection co = postgresql.getConexion();
+		  //DriverManager.getConnection(inventarios, usuario, contra);		  
 		  System.out.println("Ejecutando Query.......");
 		  ResultSet rs = null;
 		  PreparedStatement ps= co.prepareStatement("SELECT (CASE WHEN max(extract(doy FROM fecha)) IS NULL THEN 0.0 ELSE "
@@ -64,14 +61,12 @@ public class inventario
 		  }
 		  if(hoy-2>=fecha)
 		  {
-			  System.out.println("ENTRA AL IF");
-			  GeneraValuado gen=new GeneraValuado();
-			  gen.main(almacenes,"");			  			  			  	  			  			  			  
+			  System.out.println("ENTRA AL IF");			
+			  GeneraValuado.main(almacenes,"");			  			  			  	  			  			  			  
 			  
 			  System.out.println("ESCRITURA TERMINADA");	
-	  ////////////////////////////////TERMINA ESCRITURA DE ARCHIVO///////////////////////////////////		  		  		  		  		 
-			  UltimaRem rem=new UltimaRem();
-			  rem.main(almacenes, "");
+	  ////////////////////////////////TERMINA ESCRITURA DE ARCHIVO///////////////////////////////////		  		  		  		  		 			 
+			  UltimaRem.main(almacenes, "");
 	  ////////////////////////////////COMIENZA LECTURA DE ARCHIVO////////////////////////////////////
 			  String [] fields = null;		  
 			  BufferedReader br = null;
@@ -105,7 +100,7 @@ public class inventario
 			  String val7 = null;
 			  String val8 = null;
 			  String val9 = null;
-			  String val10 = null;
+			  String val = null;
 	      /////////////////////////////////// TERMINA LECTURA DE ARCHIVO//////////////////////////////
 			  Iterator<String> 	s = arr.iterator();		         
 	      /////////////////////////////////// RECOLECTA DE DATOS DE CSV///////////////////////////////
@@ -114,10 +109,11 @@ public class inventario
 				  
 				  String inter=(String)s.next();			  
 				  if(a==9)
-				  {					  
+				  {
+					  
 					  val1 =null;			    	
 					  val11=null;
-					  val1=inter; //PRINCIPAL_C5
+					  val1=inter;
 					  a=8;			    		
 				  }		    
 				  else if(a==8)
@@ -125,14 +121,15 @@ public class inventario
 					  
 					  val2 =null;
 					  val22=null;
-					  val2=inter;// VALUE
+					  val2=inter;
 					  a=7;			    		
 				  }
 				  else if(a==7)
-				  {					  
+				  {
+					  
 					  val3 =null;
 					  val33=null;
-					  val3=inter;//CODIGO
+					  val3=inter;
 					  a=6;			    		
 				  }
 				  else if(a==6)
@@ -140,43 +137,42 @@ public class inventario
 					  
 					  val4 =null;
 					  val4=inter;
-					  a=5;			    //DESCRIPCION		
+					  a=5;			    		
 				  }
 				  else if(a==5)
 				  {
 					  
 					  val5 =null;
 					  val5=inter;
-					  a=4;			    		//ATRIBUTO
+					  a=4;			    		
 				  }
 				  else if(a==4)
 				  {
 					  
 					  val6 =null;
 					  val6=inter;
-					  a=3;			    		//CANTIDAD
+					  a=3;			    		
 				  }
 				  else if(a==3)
 				  {
 					  
 					  val7 =null;
 					  val7=inter;
-					  a=2;			    		//UNIDAD
+					  a=2;			    		
 				  }
 				  else if(a==2)
 				  {
 					  
 					  val8 =null;
 					  val8=inter;
-					  a=1;			    		//PIEZAS
-				  }		
+					  a=1;			    		
+				  }	
 				  else if(a==1)
-				  {
-					  
-					  val10 =null;
-					  val10=inter;
-					  a=0;			    		//PIEZAS
-				  }		
+				  {					  
+					  val =null;
+					  val=inter;
+					  a=0;			    		
+				  }	
 				  else if(a==0)
 				  {
 					  
@@ -221,8 +217,17 @@ public class inventario
 					  if(val11.equals("")){}
 					  else{
 					  ps=co.prepareStatement("insert into inventario_teorico values((SELECT upper(LOWER( REPLACE("
-+ "CAST(uuid_generate_v4()AS varchar(50)),'-','')))),'"+val11+"','"+val1+"','"+val2+"','"+val22+"','"+val3+"','"+val33
-+"','"+val4.replace("'","")+"','"+val5+"','"+val6+"','"+val7+"','"+val8+"','"+val9+"','"+val10+"',now());");
++ "CAST(uuid_generate_v4()AS varchar(50)),'-','')))),"
++ "'"+val11+"','"+val1+"',"
++ "'"+val2+"','"+val22+"',"
++ "'"+val3+"','"+val33 
++"','"+val4.replace("'","")+"',"
++ "'"+val5+"',"
++ "'"+val6+"',"
++ "'"+val7+"',"
++ "'"+val8+"',"
++ "'"+val9+"','"+val+"'"
++ ",now());");
 					  System.out.println("Inserta"+ps);
 					  ps.execute();
 					  }
@@ -230,6 +235,8 @@ public class inventario
 			  }
 			  br.close();
 			  mensaje="Carga exitosa";
+			  ActivaAtributos.main();
+			  /*
 			  String recipient = "rquiroz@4eglobal.com lmartinez@4eglobal.com";			  
 			  String direcciones[]=recipient.split(" ");
 			  System.out.println(""+direcciones.length);
@@ -248,7 +255,8 @@ public class inventario
 				  e.printStackTrace();
 			  }
 			  resultMessage = "The e-mail was sent successfully";
-			  System.out.println("Enviado"+alm);		  		  			  
+			  System.out.println("Enviado"+alm);
+			  */
 		  }
 		  else
 		  {
@@ -256,10 +264,7 @@ public class inventario
 		  } 
 		  cn.close();
 		  co.close();
-	  } catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
+	  } catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {

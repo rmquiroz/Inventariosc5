@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import utilerias.postgresql;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -29,7 +30,7 @@ public class TercerConteo {
 		{
 		System.out.println("Se inicia conexion a bd");
 	    Class.forName("org.postgresql.Driver");
-	    Connection conexion = DriverManager.getConnection("jdbc:postgresql://10.1.250.24:5932/inventarios_c5", "postgres", "s3st2m1s4e");
+	    Connection conexion = postgresql.getConexion();
 	    //Connection conexion = DriverManager.getConnection("jdbc:postgresql://201.149.89.163:5932/openbravo", "postgres", "s3st2m1s4e");
 	    System.out.println("Se finaliza la prueba de conexion a postgresql");
 	    System.out.println("Se inicia la solicitud del reporte");

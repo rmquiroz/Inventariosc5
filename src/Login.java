@@ -1,43 +1,26 @@
-
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-
 import java.awt.Font;
-
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
-
 import usuarios.usuario;
-
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
 import javax.swing.ImageIcon;
-import javax.swing.JProgressBar;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-
-import formularios.inicio;
 import gestionarusuario.gestionusuario;
-
 import java.awt.SystemColor;
-
-import javax.swing.DropMode;
-
-import java.awt.TextField;
-
 import javax.swing.SwingConstants;
-
 public class Login extends JFrame {
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtusuario;
 	private JPasswordField txtpass;
@@ -156,12 +139,17 @@ public class Login extends JFrame {
 			}
 			if(usu.equals("3"))
 			{
-				inicio bienvenido = new inicio();
+				formularios.tercerconteo bienvenido = new formularios.tercerconteo();
 				bienvenido.setVisible(true);
 			}			
 			if(usu.equals("4"))
 			{
-				formularios.tercerconteo  bienvenido = new formularios.tercerconteo();
+				formularios.inicio  bienvenido = new formularios.inicio();
+				bienvenido.setVisible(true);
+			}			
+			if(usu.equals("5"))
+			{
+				formularios.InicioSuperAdmin  bienvenido = new formularios.InicioSuperAdmin();
 				bienvenido.setVisible(true);
 			}			
 			

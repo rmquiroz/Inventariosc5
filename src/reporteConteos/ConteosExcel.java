@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import utilerias.postgresql;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
@@ -23,19 +24,14 @@ import jxl.write.biff.RowsExceededException;
 
 public class ConteosExcel {
 	static String mensaje;
-	//static String inventarios="jdbc:postgresql://201.149.89.164:5932/inventarios";
-	//static String productivo="jdbc:postgresql://201.149.89.163:5932/openbravo";
-	static String inventarios="jdbc:postgresql://10.1.250.24:5932/inventarios_c5";
-	static String usuario="postgres",contra="s3st2m1s4e";
-	static String productivo="jdbc:postgresql://10.1.250.20:5932/openbravo";
 	static Date date = new Date();
 	static DateFormat hourFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 	public static String main(String almacenes, String repositorio){
 		
 		try {
 			Class.forName("org.postgresql.Driver");
-		Connection cn = DriverManager.getConnection(inventarios, usuario, contra);		  
-		Connection co = DriverManager.getConnection(productivo, usuario, contra);
+		Connection cn = postgresql.getConexion();		  
+		Connection co = postgresql.getConexionOpen();
 		String[] almacen;
 		int h=0;
 		  System.out.println("Ejecutando Query.......");
@@ -48,11 +44,15 @@ public class ConteosExcel {
 			  PreparedStatement ps = cn.prepareStatement("SELECT ubi.almacen,"
 + "ubi.marbete,"
 + "ubi.hueco,"
++ " usu.nombre || ' ' || usu.apellido AS CAPTURADO_POR,"
 + "CASE WHEN to_char(primer.fecha,'DD-MM-YYYY') IS NULL THEN 'SIN CAPTURA' ELSE to_char(primer.fecha,'DD-MM-YYYY') END as fecha__captura,"
 + "CASE WHEN primer.codigo IS NULL THEN 'SIN CAPTURA' else primer.codigo end as codigo_conteo1,"
++ "atributo AS atributo,"
 + "CASE when primer.cantidad is null then 'SIN CAPTURA' else primer.cantidad end as cantidad_conteo1 "
 + "FROM ubicaciones AS ubi LEFT JOIN primerconteo AS primer ON "
-+ "ubi.almacen=primer.almacen AND ubi.marbete=primer.marbete WHERE ubi.almacen similar to ('"+almacen[x]+"') ORDER BY ubi.almacen,primer.marbete ASC");
++ "ubi.almacen=primer.almacen AND ubi.marbete=primer.marbete "
++ "LEFT JOIN usuarios AS usu ON usu.id=primer.capturado "
++ "WHERE ubi.almacen similar to ('"+almacen[x]+"') ORDER BY ubi.almacen,primer.marbete ASC");
 			  rs = ps.executeQuery();
 			  ArrayList<String> col=new ArrayList<String>(); 
 			  while (rs.next())
@@ -62,14 +62,16 @@ public class ConteosExcel {
 				  col.add(rs.getString(3));				
 				  col.add(rs.getString(4));
 				  col.add(rs.getString(5));
+				  col.add(rs.getString(6));
+				  col.add(rs.getString(7));
 				  rsp=null;
-				  ps=co.prepareStatement("SELECT description FROM m_product WHERE value='"+rs.getString(5)+"'");
+				  ps=co.prepareStatement("SELECT description FROM m_product WHERE value='"+rs.getString(6)+"'");
 				  rsp=ps.executeQuery();
 				  while (rsp.next())
 				  {
 					  col.add(rsp.getString(1));
 				  }
-				  col.add(rs.getString(6));
+				  col.add(rs.getString(8));
 				  col.add("sp");
 			  }			
 			  WritableSheet ws = wb.createSheet("Primer_Conteo"+almacen[x], h);
@@ -88,11 +90,17 @@ public class ConteosExcel {
 			  Label ec3 = new Label(column, row, "HUECO", cf);
 			  ws.addCell(ec3);
 			  column++;
+			  Label ec8 = new Label(column, row, "CAPTURADO POR", cf);
+			  ws.addCell(ec8);
+			  column++;
 			  Label ec4 = new Label(column, row, "FECHA DE CAPTURA", cf);
 			  ws.addCell(ec4);
 			  column++;
 			  Label ec5 = new Label(column, row, "CODIGO DE CONTEO", cf);
 			  ws.addCell(ec5);
+			  column++;
+			  Label ec9 = new Label(column, row, "ATRIBUTO", cf);
+			  ws.addCell(ec9);
 			  column++;
 			  Label ec6 = new Label(column, row, "DESCRIPCION DE CONTEO", cf);
 			  ws.addCell(ec6);
@@ -124,10 +132,15 @@ public class ConteosExcel {
 			  ps = cn.prepareStatement("SELECT ubi.almacen,"
 + "ubi.marbete,"
 + "ubi.hueco,"
++ "usu.nombre || ' ' || usu.apellido AS CAPTURADO_POR,"
 + "CASE WHEN to_char(segundo.fecha,'DD-MM-YYYY') IS NULL THEN 'SIN CAPTURA' ELSE to_char(segundo.fecha,'DD-MM-YYYY') END as fecha__captura,"
 + "CASE WHEN segundo.codigo IS NULL THEN 'SIN CAPTURA' else segundo.codigo end as codigo_conteo2,"
++ "atributo AS ATRIBUTO,"
 + "CASE when segundo.cantidad is null then 'SIN CAPTURA' else segundo.cantidad end as cantidad_conteo2 FROM ubicaciones AS ubi "
-+ "LEFT JOIN segundoconteo AS segundo ON ubi.almacen=segundo.almacen AND ubi.marbete=segundo.marbete WHERE ubi.almacen similar to ('"+almacen[x]+"') ORDER BY "
++ "LEFT JOIN segundoconteo AS segundo ON ubi.almacen=segundo.almacen "
++ "AND ubi.marbete=segundo.marbete "
++ "LEFT JOIN usuarios AS usu ON usu.id=segundo.capturado "
++ "WHERE ubi.almacen similar to ('"+almacen[x]+"') ORDER BY "
 + "ubi.almacen,segundo.marbete ASC");
 			  rs = ps.executeQuery();
 			  ArrayList<String> colseg=new ArrayList<String>(); 
@@ -138,14 +151,16 @@ public class ConteosExcel {
 				  colseg.add(rs.getString(3));				
 				  colseg.add(rs.getString(4));
 				  colseg.add(rs.getString(5));
+				  colseg.add(rs.getString(6));
+				  colseg.add(rs.getString(7));
 				  rsp=null;
-				  ps=co.prepareStatement("SELECT description FROM m_product WHERE value='"+rs.getString(5)+"'");
+				  ps=co.prepareStatement("SELECT description FROM m_product WHERE value='"+rs.getString(6)+"'");
 				  rsp=ps.executeQuery();
 				  while (rsp.next())
 				  {
 					  colseg.add(rsp.getString(1));
 				  }
-				  colseg.add(rs.getString(6));
+				  colseg.add(rs.getString(8));
 				  colseg.add("sp");
 			  }			
 			  WritableSheet ws2 = wb.createSheet("Segundo_Conteo"+almacen[x], h);
@@ -162,11 +177,17 @@ public class ConteosExcel {
 			  Label ecseg3 = new Label(column, row, "HUECO", cf);
 			  ws2.addCell(ecseg3);
 			  column++;
+			  Label ecseg8 = new Label(column, row, "CAPTURADO POR", cf);
+			  ws2.addCell(ecseg8);
+			  column++;
 			  Label ecseg4 = new Label(column, row, "FECHA DE CAPTURA", cf);
 			  ws2.addCell(ecseg4);
 			  column++;
 			  Label ecseg5 = new Label(column, row, "CODIGO DE CONTEO", cf);
 			  ws2.addCell(ecseg5);
+			  column++;
+			  Label ecseg9 = new Label(column, row, "ATRIBUTO", cf);
+			  ws2.addCell(ecseg9);
 			  column++;
 			  Label ecseg6 = new Label(column, row, "DESCRIPCION DE PRODUCTO", cf);
 			  ws2.addCell(ecseg6);
@@ -195,8 +216,16 @@ public class ConteosExcel {
 									  column++;
 								  }
 							  }
-							  ps = cn.prepareStatement("select almacen,marbete,ubicacion,to_char(fecha,'DD-MM-YYYY'),codigo,cantidad from tercerconteofinal WHERE "
-+ "almacen like '"+almacen[x]+"'");
+							  ps = cn.prepareStatement("select almacen,"
++ "marbete,"
++ "ubicacion,"
++ "usu.nombre || ' ' || usu.apellido AS CAPTURADO_POR,"
++ "to_char(fecha,'DD-MM-YYYY'),"
++ "codigo,"
++ "atributo,"
++ "cantidad "
++ "from tercerconteofinal LEFT JOIN usuarios AS usu ON usu.id=tercerconteofinal.capturado "
++ "WHERE almacen like '"+almacen[x]+"'");
 							  rs = ps.executeQuery();
 							  ArrayList<String> colter=new ArrayList<String>(); 
 							  while (rs.next())
@@ -206,14 +235,16 @@ public class ConteosExcel {
 								  colter.add(rs.getString(3));				
 								  colter.add(rs.getString(4));
 								  colter.add(rs.getString(5));
+								  colter.add(rs.getString(6));
+								  colter.add(rs.getString(7));
 								  rsp=null;
-								  ps=co.prepareStatement("SELECT description FROM m_product WHERE value='"+rs.getString(5)+"'");
+								  ps=co.prepareStatement("SELECT description FROM m_product WHERE value='"+rs.getString(6)+"'");
 								  rsp=ps.executeQuery();
 								  while (rsp.next())
 								  {
-									  colseg.add(rsp.getString(1));
+									  colter.add(rsp.getString(1));
 								  }
-								  colter.add(rs.getString(6));
+								  colter.add(rs.getString(8));
 								  colter.add("sp");
 							  }			
 							  WritableSheet ws3 = wb.createSheet("Tercer_Conteo"+almacen[x],h);
@@ -230,11 +261,17 @@ public class ConteosExcel {
 							  Label ecter3 = new Label(column, row, "HUECO", cf);
 							  ws3.addCell(ecter3);
 							  column++;
+							  Label ecter8 = new Label(column, row, "CAPTURADO POR", cf);
+							  ws3.addCell(ecter8);
+							  column++;
 							  Label ecter4 = new Label(column, row, "FECHA DE CAPTURA", cf);
 							  ws3.addCell(ecter4);
 							  column++;
 							  Label ecter5 = new Label(column, row, "CODIGO DE CONTEO", cf);
 							  ws3.addCell(ecter5);
+							  column++;
+							  Label ecter9 = new Label(column, row, "ATRIBUTO", cf);
+							  ws3.addCell(ecter9);
 							  column++;
 							  Label ecter6 = new Label(column, row, "DESCRIPCION DE PRODUCTO", cf);
 							  ws3.addCell(ecter6);

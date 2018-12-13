@@ -1,6 +1,5 @@
 package formularios;
-
-import java.awt.BorderLayout;
+import java.awt.Choice;
 import java.awt.EventQueue;
 import java.awt.TextField;
 
@@ -18,6 +17,8 @@ import javax.swing.JOptionPane;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.Font;
 
 import javax.swing.ImageIcon;
@@ -26,34 +27,21 @@ import java.awt.SystemColor;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
-import javax.swing.JComboBox;
-
-import java.awt.Component;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.LinkedList;
-
-import javax.swing.Box;
 import javax.swing.SwingConstants;
 
-import primerconteo.primer;
-import usuarios.usuario;
-import utilerias.postgresql;
+import validainsertar.ValidaInsAct;
+import validainsertar.ValidarTercerConteo;
+import conteos.*;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.Choice;
-
+import java.util.ArrayList;
+import java.util.Iterator;
 public class tercerconteo extends JFrame {
-
-	public static LinkedList contenedor=new LinkedList();
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtbuscar;
 	private JTextField txtcodigo;
@@ -62,7 +50,6 @@ public class tercerconteo extends JFrame {
 	private JTextField txtuom;
 	private JTextField txtalmacen;
 	private JTextField txtubicacion;
-
 	/**
 	 * Launch the application.
 	 */
@@ -79,42 +66,13 @@ public class tercerconteo extends JFrame {
 			}
 		});
 	}
-
 	/**
 	 * Create the frame.
 	 */
 	public tercerconteo() {
-		
-		final Choice choice_1 = new Choice();
-		choice_1.setForeground(Color.BLACK);
-		choice_1.setBounds(600, 285, 114, 20);
-		
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowActivated(WindowEvent arg0) {
-				Connection con = null;
-				ResultSet rs=null;
-				try {
-					choice_1.removeAll();
-					choice_1.add("");
-					Class.forName("org.postgresql.Driver");
-					String url = "jdbc:postgresql://10.1.250.24:5932/inventarios_c5";
-					//String url = "jdbc:postgresql://201.149.89.164:5932/inventarios_c5";
-					String usuario = "postgres";
-					String pass = "s3st2m1s4e";				
-					con = DriverManager.getConnection(url, usuario, pass);
-					PreparedStatement ps=con.prepareStatement("SELECT atributo FROM inventario_teorico GROUP BY atributo");
-					rs=ps.executeQuery();
-					while (rs.next()){
-						choice_1.add(rs.getString(1));
-					}
-					con.close();	
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			
-			}
-		});
+		usuarios.usuario gestionusuario = new usuarios.usuario();
+		final String usu = gestionusuario.getUsuario();
+		System.out.println("Usuario Tercer Conteo: "+usu);
 		setResizable(false);
 		setBackground(SystemColor.inactiveCaption);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -132,8 +90,6 @@ public class tercerconteo extends JFrame {
 				 dispose();
 			      formularios.tercerconteo tercerconteo = new formularios.tercerconteo();
 					tercerconteo.setVisible(true);
-				 
-				
 			}
 		});
 		btnLimpiarFormulario.setFont(new Font("Dialog", Font.PLAIN, 14));
@@ -145,7 +101,6 @@ public class tercerconteo extends JFrame {
 		txtubicacion.setColumns(10);
 		txtubicacion.setBounds(495, 132, 127, 20);
 		contentPane.add(txtubicacion);
-		contentPane.add(choice_1);
 		
 		txtalmacen = new JTextField();
 		txtalmacen.setEditable(false);
@@ -204,64 +159,23 @@ public class tercerconteo extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				String marbete = txtbuscar.getText();
-				Connection con = null;
-				try {
-					Class.forName("org.postgresql.Driver");
-					//String url = "jdbc:postgresql://10.1.250.20:5932/openbravo";
-					String url = "jdbc:postgresql://10.1.250.24:5932/inventarios_c5";
-					//String url = "jdbc:postgresql://201.149.89.164:5932/inventarios_c5";
-					String usuario = "postgres";
-					String pass = "s3st2m1s4e";
-					
-
-					con = DriverManager.getConnection(url, usuario, pass);
-					
-					 ResultSet rs = null;
-/*					 PreparedStatement ps = con.prepareStatement("SELECT m_warehouse.name as almacen,m_locator.value as ubicacion,m_locator.barcode  as marbete "
- +" FROM m_locator, "
- +" m_warehouse  "
- +" WHERE  "
- +" m_locator.m_warehouse_id=m_warehouse.m_warehouse_id " 
- +" AND m_warehouse.isactive='Y'  "
- +" and m_locator.isactive='Y' "
- +" AND m_Warehouse.name NOT LIKE '4E_MP TEMPORAL' " 
- +" AND m_Warehouse.name NOT LIKE '4G_SMO m_productUCCION' "  
- +" AND m_Warehouse.name NOT LIKE '4G_1D ADUANA'  "
- +" AND m_Warehouse.name NOT LIKE '4E BRANDS EUA'  "
- +" AND m_Warehouse.name NOT LIKE '4G_1F REFACCIONES' " 
- +" AND m_Warehouse.name NOT LIKE 'ALMACEN_MERIDA' "
- +" AND m_locator.barcode like '"+marbete+"'"
- +" and m_locator.value not like '----------------------------------------' "
- +" and m_Warehouse.ad_Client_id not like '23C59575B9CF467C9620760EB255B389' "
- +" ORDER BY m_warehouse.name,m_locator.value ASC");*/
-					 PreparedStatement ps = con.prepareStatement("select almacen,ubicacion from tercerconteo where marbete like '"+marbete+"'");
-
-					 rs = ps.executeQuery();
-				      System.out.println(" Termina Query.......");
-					 
-				      rs.next();
-				      
-				      txtalmacen.setText(rs.getString(1));
-				      txtubicacion.setText(rs.getString(2));
-				      
-				      txtbuscar.setEditable(false);
-				      txtalmacen.setEditable(false);
-				      txtubicacion.setEditable(false);
-				      
-				      btnBuscar.setEnabled(false); 
-					 
-				      con.close();
-				} catch (ClassNotFoundException e) {
-
-					System.out.println("Conexion Fallida DRIVER------>>>");
-
-					e.printStackTrace();
-				} catch (SQLException e) {
-					System.out.println("Conexion BD NO CONECTA------>>>");
-					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Numero de Marbete no Confirmado para Tercer Conteo");
-					txtbuscar.setText("");
-					e.printStackTrace();
+				String detalleal=Confirmacion.main(marbete);
+				if(detalleal.contains("|"))
+				{									
+					String[] campos=detalleal.split("\\|");								      
+					txtalmacen.setText(campos[0]);
+					txtubicacion.setText(campos[1]);				      
+					txtbuscar.setEditable(false);
+					txtalmacen.setEditable(false);
+					txtubicacion.setEditable(false);				      
+					btnBuscar.setEnabled(false);
 				}
+				else 
+				{
+					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Numero de Marbete No Confirmado para Tercer Conteo");
+					txtbuscar.setText("");
+					txtbuscar.requestFocus();
+				}				
 			}
 		});
 			
@@ -269,71 +183,27 @@ public class tercerconteo extends JFrame {
 		btnBuscar.setFont(new Font("Dialog", Font.BOLD, 14));
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
 				String marbete = txtbuscar.getText();
-				Connection con = null;
-				try {
-					Class.forName("org.postgresql.Driver");
-					//String url = "jdbc:postgresql://10.1.250.20:5932/openbravo";
-					String url = "jdbc:postgresql://10.1.250.24:5932/inventarios_c5";
-					//String url = "jdbc:postgresql://201.149.89.164:5932/inventarios_c5";
-					String usuario = "postgres";
-					String pass = "s3st2m1s4e";
-					
-
-					con = DriverManager.getConnection(url, usuario, pass);
-					
-					 ResultSet rs = null;
-					/* PreparedStatement ps = con.prepareStatement("SELECT m_warehouse.name as almacen,m_locator.value as ubicacion,m_locator.barcode  as marbete "
- +" FROM m_locator, "
- +" m_warehouse  "
- +" WHERE  "
- +" m_locator.m_warehouse_id=m_warehouse.m_warehouse_id " 
- +" AND m_warehouse.isactive='Y'  "
- +" and m_locator.isactive='Y' "
- +" AND m_Warehouse.name NOT LIKE '4E_MP TEMPORAL' " 
- +" AND m_Warehouse.name NOT LIKE '4G_SMO m_productUCCION' "  
- +" AND m_Warehouse.name NOT LIKE '4G_1D ADUANA'  "
- +" AND m_Warehouse.name NOT LIKE '4E BRANDS EUA'  "
- +" AND m_Warehouse.name NOT LIKE '4G_1F REFACCIONES' " 
- +" AND m_Warehouse.name NOT LIKE 'ALMACEN_MERIDA' "
- +" AND m_locator.barcode like '"+marbete+"'"
- +" and m_locator.value not like '----------------------------------------' "
- +" and m_Warehouse.ad_Client_id not like '23C59575B9CF467C9620760EB255B389' "
- +" ORDER BY m_warehouse.name,m_locator.value ASC");*/
-					 
-					 PreparedStatement ps = con.prepareStatement("select almacen,ubicacion from tercerconteo where marbete like '"+marbete+"'");
-
-					 rs = ps.executeQuery();
-				      System.out.println(" Termina Query.......");
-					 
-				      rs.next();
-				      
-				      txtalmacen.setText(rs.getString(1));
-				      txtubicacion.setText(rs.getString(2));
-				      
-				      txtbuscar.setEditable(false);
-				      txtalmacen.setEditable(false);
-				      txtubicacion.setEditable(false);
-				      
-				      btnBuscar.setEnabled(false); 
-					 con.close();
-					 
-				} catch (ClassNotFoundException e) {
-
-					System.out.println("Conexion Fallida DRIVER------>>>");
-
-					e.printStackTrace();
-				} catch (SQLException e) {
-					System.out.println("Conexion BD NO CONECTA------>>>");
-					JOptionPane.showMessageDialog(contentPane, "Error ------>>>  Numero de Marbete no Confirmado para Tercer Conteo");
-					txtbuscar.setText("");
-					
-					e.printStackTrace();
+				String detalleal=Confirmacion.main(marbete);
+				if(detalleal.contains("|"))
+				{									
+					String[] campos=detalleal.split("\\|");								      
+					txtalmacen.setText(campos[0]);
+					txtubicacion.setText(campos[1]);				      
+					txtbuscar.setEditable(false);
+					txtalmacen.setEditable(false);
+					txtubicacion.setEditable(false);				      
+					btnBuscar.setEnabled(false);
 				}
+				else 
+				{
+					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Numero de Marbete No Confirmado para Tercer Conteo");
+					txtbuscar.setText("");
+					txtbuscar.requestFocus();
+				}	
 			}
-		});
-
+		});		
+		
 		btnBuscar.setBounds(354, 85, 89, 28);
 		contentPane.add(btnBuscar);
 		
@@ -381,105 +251,54 @@ public class tercerconteo extends JFrame {
 		txtcodigo.setFont(new Font("Dialog", Font.PLAIN, 11));
 		txtcodigo.setBounds(112, 204, 106, 21);
 		contentPane.add(txtcodigo);
-		txtcodigo.setColumns(10);
-		
-		
+		txtcodigo.setColumns(10);		
 	
 		final JButton btnValidar = new JButton("Validar");
 		btnValidar.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-
 				String codigo = txtcodigo.getText();
-				Connection con = null;
-				try {
-					Class.forName("org.postgresql.Driver");
-					String url = "jdbc:postgresql://10.1.250.20:5932/openbravo";
-					//String url = "jdbc:postgresql://201.149.89.163:5932/openbravo";
-					String usuario = "postgres";
-					String pass = "s3st2m1s4e";
-					
-
-					con = DriverManager.getConnection(url, usuario, pass);
-					
-					 ResultSet rs = null;
-					 PreparedStatement ps = con.prepareStatement("SELECT prod.description,uom.name from m_product as prod,c_uom as uom  where prod.c_uom_id=uom.c_uom_id and prod.value like '"+codigo+"'");
-					 rs = ps.executeQuery();
-				      System.out.println(" Termina Query.......");
-					 
-				      rs.next();
-				      
-				      txtdescripcion.setText(rs.getString(1));
-				      txtuom.setText(rs.getString(2));
-				      
-				      txtdescripcion.setEditable(false);
-				      txtcodigo.setEditable(false);
-				      
-				      
-				      btnValidar.setEnabled(false); 
-
-				      con.close();
-					 
-				} catch (ClassNotFoundException e) {
-
-					System.out.println("Conexion Fallida DRIVER------>>>");
-
-					e.printStackTrace();
-				} catch (SQLException e) {
-					System.out.println("Conexion BD NO CONECTA------>>>");
-					JOptionPane.showMessageDialog(contentPane, "Error ------>>>Codigo OB3 no existe");
+				String producto=Productos.main(codigo);
+				if(producto.isEmpty())
+				{
+					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Codigo");
 					txtcodigo.setText("");
-					e.printStackTrace();
+					txtcodigo.requestFocus();
+				}
+				else{
+					String[] detallprod=producto.split("\\|");
+					txtdescripcion.setText(detallprod[0]);
+					txtuom.setText(detallprod[1]);				     
+					txtdescripcion.setEditable(false);
+					txtcodigo.setEditable(false);				      				      
+					btnValidar.setEnabled(false);
+					txtcantidad.requestFocus();
 				}
 			}
 		});
-
 			
 		btnValidar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
 				String codigo = txtcodigo.getText();
-				Connection con = null;
-				try {
-					Class.forName("org.postgresql.Driver");
-					String url = "jdbc:postgresql://10.1.250.20:5932/openbravo";
-					//String url = "jdbc:postgresql://201.149.89.163:5932/openbravo";
-					String usuario = "postgres";
-					String pass = "s3st2m1s4e";
-					
-
-					con = DriverManager.getConnection(url, usuario, pass);
-					
-					 ResultSet rs = null;
-					 PreparedStatement ps = con.prepareStatement("SELECT prod.description,uom.name from m_product as prod,c_uom as uom  where prod.c_uom_id=uom.c_uom_id and prod.value like '"+codigo+"'");
-					 rs = ps.executeQuery();
-				      System.out.println(" Termina Query.......");
-					 
-				      rs.next();
-				      
-				      txtdescripcion.setText(rs.getString(1));
-				      txtuom.setText(rs.getString(2));
-				      
-				      txtdescripcion.setEditable(false);
-				      txtcodigo.setEditable(false);
-				      
-				      
-				      btnValidar.setEnabled(false); 
-				      con.close();
-					 
-				} catch (ClassNotFoundException e) {
-
-					System.out.println("Conexion Fallida DRIVER------>>>");
-
-					e.printStackTrace();
-				} catch (SQLException e) {
-					System.out.println("Conexion BD NO CONECTA------>>>");
-					JOptionPane.showMessageDialog(contentPane, "Error ------>>>Codigo OB3 no existe");
+				String producto=Productos.main(codigo);
+				if(producto.isEmpty())
+				{
+					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Codigo");
 					txtcodigo.setText("");
-					e.printStackTrace();
+					txtcodigo.requestFocus();
+				}
+				else{
+					String[] detallprod=producto.split("\\|");
+					txtdescripcion.setText(detallprod[0]);
+					txtuom.setText(detallprod[1]);				     
+					txtdescripcion.setEditable(false);
+					txtcodigo.setEditable(false);				      				      
+					btnValidar.setEnabled(false);
+					txtcantidad.requestFocus();
 				}
 			}
 		});
+		
 		btnValidar.setVerticalAlignment(SwingConstants.TOP);
 		btnValidar.setFont(new Font("Dialog", Font.PLAIN, 14));
 		btnValidar.setBounds(236, 202, 89, 28);
@@ -505,15 +324,32 @@ public class tercerconteo extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent a) {
 				char c = a.getKeyChar();
-				if((c<'0' || c>'9') && c != a.VK_BACK_SPACE && c != '.')  //<<>>
+				if((c<'0' || c>'9') && c != KeyEvent.VK_BACK_SPACE && c != '.')  //<<>>
 				{
 					System.out.println("Char "+a.getKeyChar());
 					getToolkit().beep();
-					 a.consume();
-					 
+					a.consume();					 
 				}
 			}
 		});
+		final Choice choice = new Choice();
+		choice.setForeground(Color.BLACK);
+		choice.setBackground(Color.WHITE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				ArrayList<String> arr=new ArrayList<String>();
+				arr=Atributos.main();
+				Iterator<String> i = arr.iterator();
+				while(i.hasNext()){
+					 String campo = (String)i.next();
+					 choice.add(campo);
+				}
+			}
+		});
+		choice.setBounds(520, 203, 131, 20);
+		contentPane.add(choice);
+		
 		txtcantidad.setFont(new Font("Dialog", Font.PLAIN, 11));
 		txtcantidad.setBounds(344, 286, 114, 20);
 		contentPane.add(txtcantidad);
@@ -522,508 +358,176 @@ public class tercerconteo extends JFrame {
 		JButton btnConfirmarConteo = new JButton("Confirmar Conteo");
 		btnConfirmarConteo.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent arg0) {String codigo= txtcodigo.getText();
-			String marbete= txtbuscar.getText();
-			//String cantidad= txtcantidad.getText();
-			double cantidad= Double.parseDouble(txtcantidad.getText());
-			String ubicacion= txtubicacion.getText();
-			String almacen= txtalmacen.getText();
-			String atributo= choice_1.getSelectedItem();
-			
-			 if(codigo.isEmpty()) {
-				JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Codigo");
-		
-			} else if(marbete.isEmpty()) {
-				JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Marbete");
-			//} else if(String.valueOf(Integer.parseInt(txtcantidad.getText())) != null) {
-			} else if(String.valueOf(Double.parseDouble(txtcantidad.getText())).isEmpty()) {
-				JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Cantidad");
-			} else {
-				validainsertar.ValidarTercerConteo vins1=new validainsertar.ValidarTercerConteo();
-				String tabla="tercerconteo";
-				String tabla2="inventariofinal";
-				String result1=vins1.main(marbete);
-				String valor;
-				  if(Math.ceil(cantidad)>cantidad)				
-					{					
-						valor=marbete+"."+codigo+"."+atributo+"."+cantidad;
-					}
-					else{					
-						String cant=cantidad+"";
-						cant=cant.substring(0,cant.indexOf("."));
-						System.out.println("ELSE"+cant);
-											
-						valor=marbete+"."+codigo+"."+atributo+"."+cant+".00";
-						
-					}
-					
-				
-				System.out.println("Cantidad:"+cantidad);
-				if(result1.equals("NO"))
+			public void keyPressed(KeyEvent arg0) {
+				if(txtalmacen.getText().isEmpty())
 				{
-				
-				String cantidadinsertada;
-				System.out.println(valor);
-				
-				System.out.println("ESTOY CONCATENANDO EL VALOR");
-
-				System.out.println("HAGO VALIDACION");
-				 try
-				  {
-					 Class.forName("org.postgresql.Driver");
-						String url = "jdbc:postgresql://10.1.250.24:5932/inventarios_c5";
-						//String url = "jdbc:postgresql://201.149.89.164:5932/inventarios_c5";
-						String usuario = "postgres";
-						String pass = "s3st2m1s4e";	  
-					  
-					  Connection co =  DriverManager.getConnection(url, usuario, pass);		  
-					  System.out.println("Ejecutando Query.......");
-					  ResultSet rs = null;
-					
-					  PreparedStatement ps= co.prepareStatement("SELECT cantidad FROM tercerconteofinal WHERE marbete='"+marbete+"' AND codigo='"+codigo+"'");
-					  rs=ps.executeQuery();
-					  while(rs.next()){
-						  cantidad=cantidad+rs.getInt(1);
-					  }
-					   valor="";
-					  if(Math.ceil(cantidad)>cantidad)				
-						{					
-							valor=marbete+"."+codigo+"."+atributo+"."+cantidad;
-						}
-						else{					
-							String cant=cantidad+"";
-							cant=cant.substring(0,cant.indexOf("."));
-							System.out.println("ELSE"+cant);
-												
-							valor=marbete+"."+codigo+"."+atributo+"."+cant+".00";							
-						}
-						
-					
-					
-					
-					System.out.println(valor);
-					
-					System.out.println("ESTOY CONCATENANDO EL VALOR");
-
-					System.out.println("HAGO VALIDACION");
-
-					   
-
-					  
-					ps= co.prepareStatement("select (marbete||'.'||codigo||'.'||atributo||'.'||round(cantidad::numeric,2)) from primerconteo "
-+ "where (marbete||'.'||codigo||'.'||atributo||'.'||round(cantidad::numeric,2))='"+valor+"' "
-+ "UNION "
-+ "select (marbete||'.'||codigo||'.'||atributo||'.'||round(cantidad::numeric,2)) from SEGUNDOCONTEO "
-+ "where (marbete||'.'||codigo||'.'||atributo||'.'||round(cantidad::numeric,2))='"+valor+"'");
-					System.out.println("consul"+ps);;
-					  rs=ps.executeQuery();
-					  co.close();
-					  if(rs.next()){						  
-						  JOptionPane.showMessageDialog(contentPane, "VALIDACION ------>>> El conteo coincide con uno de los anteriores");
-						  co = DriverManager.getConnection(url, usuario, pass);
-						
-						int rsupdate;
-						Statement stmtupdate = co.createStatement();
-						
+					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Marbete");
+					txtbuscar.requestFocus();
+				}
+				else if(txtdescripcion.getText().isEmpty())
+				{
+					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Producto");
+					txtcodigo.requestFocus();
+				}
+				else if(txtcantidad.getText().isEmpty())
+				{
+					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique la cantidad");
+					txtcantidad.requestFocus();
+				}
+				else{					
+					String marbete= txtbuscar.getText();
+					String atributo=choice.getSelectedItem(); 
+					String codigo= txtcodigo.getText();
+					double cantidad= Double.parseDouble(txtcantidad.getText());
+					String ubicacion= txtubicacion.getText();
+					String almacen= txtalmacen.getText();					
+					String result1=ValidarTercerConteo.main(marbete);					
+					if(result1.equals("NO"))
+					{					
 						System.out.println("Inicio Insercion------>>>");
-						validainsertar.ValidaInsAct vins=new validainsertar.ValidaInsAct();
 						String conteo="tercerconteofinal";
-						String result=vins.main(codigo, marbete,conteo,atributo);
-						PreparedStatement psinsert = null ;
-						System.out.println("IICIA" +result);
+						String valor=null;
+						cantidad=cantidad+Double.parseDouble(SumaCantidades.main(marbete,codigo,atributo));					
+						valor=ValidaCantidades.main(marbete, codigo, ""+cantidad,atributo);
+						cantidad= Double.parseDouble(txtcantidad.getText());
+						if(!valor.equals("0")){					
+							JOptionPane.showMessageDialog(contentPane, "VALIDACION ------>>> El conteo coincide con uno de los anteriores");					
+						}																																		
+						else{
+							JOptionPane.showMessageDialog(contentPane, "VERIFICACION ------>>> TU CONTEO NO COINCIDE CON NINGUNO DE LOS ANTERIORES ");											  					   
+							if(usu.equals("japena"))
+							{
+								JOptionPane.showMessageDialog(contentPane, "VERIFICACION ------>>> USUARIO AUTORIZADO PARA REGISTRAR");
+							}    
+							else{					    	
+								JOptionPane.showMessageDialog(contentPane, "VERIFICACION ------>>> PARA CONFIRMAR EL TERCER CONTEO ES NECESARIO USUARIO Y CONTRASEÑA DEL SUPERADMINISTRADOR");
+								String usuario="japena";								
+								String contra="JORGE1980";			   
+								String usuario_introducido="";
+								String clave_introducida="";						      
+								while (usuario_introducido.equals(usuario)==false||clave_introducida.equals(contra)==false){
+									usuario_introducido= JOptionPane.showInputDialog("Introduzca su Usuario");
+									clave_introducida = JOptionPane.showInputDialog("Introduzca su Contraseña");						      
+								}
+							}				
+						}						
+						String result=ValidaInsAct.main(codigo, marbete,conteo,atributo);
+						System.out.println("IICIA" +result);													
 						if(result.equals("UPDATE")){
 							System.out.println("UPDATE");
-							psinsert = co.prepareStatement("UPDATE tercerconteofinal "
-+ "SET  cantidad="+cantidad+" "
-+ "where codigo like '"+codigo+"' "
-+ "and marbete like '"+marbete+"' "
-+ "AND fecha >  now()::DATE - CAST('4 days' AS INTERVAL) "
-+ "AND atributo='"+atributo+"'");
+							Actualizacion.main(conteo,cantidad+"",codigo,marbete,usu,atributo);
 						}
-						else if(result.equals("INSERT"))
-						{
+						else if(result.equals("INSERT")){
 							System.out.println("INSERT");
-							psinsert = co.prepareStatement("insert into tercerconteofinal values"
-+ "('"+codigo+"','"+atributo+"','"+marbete+"','"+cantidad+"',now(),'"+ubicacion+"','"+almacen+"')");
-						}
-											 							
-					rsupdate = psinsert.executeUpdate();					
-					System.out.println("Termine la Insercion------>>>");
-					stmtupdate.close();
-					co.close();
-					
-					System.out.println("Cerre la conexion------>>>");
-					
-					      btnValidar.setEnabled(false); 
-					      JOptionPane.showMessageDialog(contentPane, "Registrado Correctamente");
-					      
-					      dispose();
-					      formularios.tercerconteo tercerconteo = new formularios.tercerconteo();
-							tercerconteo.setVisible(true);
-
-						  
-					  }
-					  else{
-						  
-						  JOptionPane.showMessageDialog(contentPane, "VERIFICACION ------>>> TU CONTEO NO COINCIDE CON NINGUNO DE LOS ANTERIORES ");
-						  
-						  JOptionPane.showMessageDialog(contentPane, "VERIFICACION ------>>> PARA CONFIRMAR EL TERCER CONTEO ES NECESARIO USUARIO Y CONTRASEÑA DEL SUPERADMINISTRADOR");
-						  
-						  
-					
-							
-/*
-							co = DriverManager.getConnection(url, usuario, pass);
-							
-							 ResultSet rs1 = null;
-							 PreparedStatement ps1 = co.prepareStatement("select usuario,pass from usuarios ");
-							 rs1 = ps1.executeQuery();
-						      System.out.println(" Termina Query.......");
-							 
-						      while(rs1.next()){
-						      
-						      String usu=rs1.getString(1);
-						      String contra=rs1.getString(2);
-						      
-						      
-						      co.close();
-						      System.out.println("cierro la conexcion de la base usuarios");*/
-						      
-						   
-					      String usu="admin";
-					      String contra="admin";
-					      
-						  
-						      String usuario_introducido="";
-						      String clave_introducida="";
-						      
-						      while (usuario_introducido.equals(usu)==false||clave_introducida.equals(contra)==false){
-						    	  usuario_introducido= JOptionPane.showInputDialog("Introduzca su Usuario");
-						    	  clave_introducida = JOptionPane.showInputDialog("Introduzca su Contraseña");
-						      
-						      }
-						      co = DriverManager.getConnection(url, usuario, pass);
-								
-								int rsupdate;
-								Statement stmtupdate = co.createStatement();
-								
-								System.out.println("Inicio Insercion------>>>");
-								validainsertar.ValidaInsAct vins=new validainsertar.ValidaInsAct();
-								String conteo="tercerconteofinal";
-								String result=vins.main(codigo, marbete,conteo,atributo);
-								PreparedStatement psinsert = null ;
-								System.out.println("IICIA" +result);
-								if(result.equals("UPDATE")){
-									
-									psinsert = co.prepareStatement("UPDATE tercerconteofinal "
-+ "SET cantidad="+cantidad+" "
-+ "where codigo like '"+codigo+"' "
-+ "and marbete like '"+marbete+"' "
-+ "AND fecha >  now()::DATE - CAST('4 days' AS INTERVAL) "
-+ "AND atributo='"+atributo+"'");
-									System.out.println("UPDATE "+ psinsert);
-								}
-								else if(result.equals("INSERT"))
-								{
-									System.out.println("INSERT");
-									psinsert = co.prepareStatement("insert into tercerconteofinal values"
-+ "('"+codigo+"','"+atributo+"','"+marbete+"','"+cantidad+"',now(),'"+ubicacion+"','"+almacen+"')");
-								}
-													 							
-							rsupdate = psinsert.executeUpdate();
-								System.out.println("Termine la Insercion------>>>");
-							stmtupdate.close();
-							co.close();
-							
-							System.out.println("Cerre la conexion------>>>");
-							
-							      btnValidar.setEnabled(false); 
-							      JOptionPane.showMessageDialog(contentPane, "Registrado Correctamente");
-							      
-							      dispose();
-							      formularios.tercerconteo tercerconteo = new formularios.tercerconteo();
-									tercerconteo.setVisible(true);
-
-						      
-						    	  
-
-					  }
-				
-		  
-				
-				
-				  }catch (ClassNotFoundException e) {
-
-				System.out.println("Conexion Fallida DRIVER------>>>");
-
-				e.printStackTrace();
-			} catch (SQLException e) {
-				System.out.println("Conexion BD NO CONECTA------>>>");
-			//	JOptionPane.showMessageDialog(contentPane, "Infomacion Erronea favor de Verificar");
-				
-				e.printStackTrace();
-			}
-			
-
-		}
-				 else{
-				      JOptionPane.showMessageDialog(contentPane, "ERROR: UBICACION REGISTRADA EN INVENTARIO FINAL");	
-
-				      dispose();
-				      formularios.tercerconteo tercerconteo = new formularios.tercerconteo();
+							Insersion.main(conteo, cantidad+"", codigo, marbete, usu, ubicacion, almacen,atributo);						
+						}											 																			
+						JOptionPane.showMessageDialog(contentPane, "Registrado Correctamente");
+						dispose();
+						formularios.tercerconteo tercerconteo = new formularios.tercerconteo();
+						tercerconteo.setVisible(true);				
+					}
+					else{
+						JOptionPane.showMessageDialog(contentPane, "ERROR: UBICACION REGISTRADA EN INVENTARIO FINAL");	
+						dispose();
+						formularios.tercerconteo tercerconteo = new formularios.tercerconteo();
 						tercerconteo.setVisible(true);
-				 }
-				
-			}
-				
-		}
-			 
-			
-	});
-
+					}				
+				}				
+			}			 			
+		});
+		
 		btnConfirmarConteo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				String codigo= txtcodigo.getText();
-				String marbete= txtbuscar.getText();
-				//String cantidad= txtcantidad.getText();
-				double cantidad= Double.parseDouble(txtcantidad.getText());
-				String ubicacion= txtubicacion.getText();
-				String almacen= txtalmacen.getText();
-				String atributo=choice_1.getSelectedItem();
-				
-				 if(codigo.isEmpty()) {
-					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Codigo");
-			
-				} else if(marbete.isEmpty()) {
+				if(txtalmacen.getText().isEmpty())
+				{
 					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Marbete");
-				//} else if(String.valueOf(Integer.parseInt(txtcantidad.getText())) != null) {
-				} else if(String.valueOf(Double.parseDouble(txtcantidad.getText())).isEmpty()) {
-					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Cantidad");
-				} else {
-					  try
-					  {
-						  Class.forName("org.postgresql.Driver");
-						  String url = "jdbc:postgresql://10.1.250.24:5932/inventarios_c5";
-						  //String url = "jdbc:postgresql://201.149.89.164:5932/inventarios_c5";
-							String usuario = "postgres";
-							String pass = "s3st2m1s4e";	  
-						  
-						  Connection co =  DriverManager.getConnection(url, usuario, pass);		  
-						  System.out.println("Ejecutando Query.......");
-						  ResultSet rs = null;
-						
-						  PreparedStatement ps= co.prepareStatement("SELECT cantidad FROM tercerconteofinal WHERE marbete='"+marbete+"' AND codigo='"+codigo+"'");
-						  rs=ps.executeQuery();
-						  while(rs.next()){
-							  cantidad=cantidad+rs.getInt(1);
-						  }
-						  String valor;
-						  if(Math.ceil(cantidad)>cantidad)				
-							{					
-								valor=marbete+"."+codigo+"."+atributo+"."+cantidad;
-							}
-							else{					
-								String cant=cantidad+"";
-								cant=cant.substring(0,cant.indexOf("."));
-								System.out.println("ELSE"+cant);
-													
-								valor=marbete+"."+codigo+"."+atributo+"."+cant+".00";								
-							}
-							
-						
-						
-						
-						System.out.println(valor);
-						
-						System.out.println("ESTOY CONCATENANDO EL VALOR");
-
-						System.out.println("HAGO VALIDACION");
-
-						   
-						  ps= co.prepareStatement("select (marbete||'.'||codigo||'.'||atributo||'.'||round(cantidad::numeric,2)) "
-+ "from primerconteo "
-+ "where (marbete||'.'||codigo||'.'||atributo||'.'||round(cantidad::numeric,2))='"+valor+"' "
-+ "UNION "
-+ "select (marbete||'.'||codigo||'.'||atributo||'.'||round(cantidad::numeric,2)) "
-+ "from segundoconteo "
-+ "where (marbete||'.'||codigo||'.'||atributo||'.'||round(cantidad::numeric,2))='"+valor+"'");
-					  System.out.println("consul"+ps);
-						  rs=ps.executeQuery();
-						  co.close();
-						  if(rs.next()){
-							  
-								JOptionPane.showMessageDialog(contentPane, "VALIDACION ------>>> El conteo coincide con uno de los anteriores");
-							  
-								
-
-							co = DriverManager.getConnection(url, usuario, pass);
-							
-							int rsupdate;
-							Statement stmtupdate = co.createStatement();
-							
-							System.out.println("Inicio Insercion------>>>");
-							validainsertar.ValidaInsAct vins=new validainsertar.ValidaInsAct();
-							String conteo="tercerconteofinal";
-							String result=vins.main(codigo, marbete,conteo,atributo);
-							PreparedStatement psinsert = null ;
-							System.out.println("IICIA" +result);
-							if(result.equals("UPDATE")){
-								System.out.println("UPDATE");
-								psinsert = co.prepareStatement("UPDATE tercerconteofinal "
-+ "SET cantidad="+cantidad+" "
-+ "where codigo like '"+codigo+"' "
-+ "and marbete like '"+marbete+"' "
-+ "AND fecha >  now()::DATE - CAST('4 days' AS INTERVAL) "
-+ "AND atributo='"+atributo+"'");
-							}
-							else if(result.equals("INSERT")){
-								System.out.println("INSERT");
-								psinsert = co.prepareStatement("insert into tercerconteofinal values"
-+ "('"+codigo+"','"+atributo+"','"+marbete+"','"+cantidad+"',now(),'"+ubicacion+"','"+almacen+"')");
-							}												 							
-							rsupdate = psinsert.executeUpdate();					
-							System.out.println("Termine la Insercion------>>>");
-						stmtupdate.close();
-						co.close();
-						
-						System.out.println("Cerre la conexion------>>>");
-						
-						      btnValidar.setEnabled(false); 
-						      JOptionPane.showMessageDialog(contentPane, "Registrado Correctamente");
-						      
-						      dispose();
-						      formularios.tercerconteo tercerconteo = new formularios.tercerconteo();
-								tercerconteo.setVisible(true);
-
-							  
-						  }
-						  else{
-							  
-							  JOptionPane.showMessageDialog(contentPane, "VERIFICACION ------>>> TU CONTEO NO COINCIDE CON NINGUNO DE LOS ANTERIORES ");
-							  
-							  JOptionPane.showMessageDialog(contentPane, "VERIFICACION ------>>> PARA CONFIRMAR EL TERCER CONTEO ES NECESARIO USUARIO Y CONTRASEÑA DEL SUPERADMINISTRADOR");
-							  
-							  
-						
-								
-/*
-								co = DriverManager.getConnection(url, usuario, pass);
-								
-								 ResultSet rs1 = null;
-								 PreparedStatement ps1 = co.prepareStatement("select usuario,pass from usuarios ");
-								 rs1 = ps1.executeQuery();
-							      System.out.println(" Termina Query.......");
-								 
-							      while(rs1.next()){
-							      
-							      String usu=rs1.getString(1);
-							      String contra=rs1.getString(2);
-							      
-							      
-							      co.close();
-							      System.out.println("cierro la conexcion de la base usuarios");*/
-							      
-							   
-						      String usu="admin";
-						      String contra="admin";
-						      
-							  
-							      String usuario_introducido="";
-							      String clave_introducida="";
-							      
-							      while (usuario_introducido.equals(usu)==false||clave_introducida.equals(contra)==false){
-							    	  usuario_introducido= JOptionPane.showInputDialog("Introduzca su Usuario");
-							    	  clave_introducida = JOptionPane.showInputDialog("Introduzca su Contraseña");
-							      
-							      }
-							      co = DriverManager.getConnection(url, usuario, pass);
-									
-									int rsupdate;
-									Statement stmtupdate = co.createStatement();
-									
-									System.out.println("Inicio Insercion------>>>");
-									validainsertar.ValidaInsAct vins=new validainsertar.ValidaInsAct();
-									String conteo="tercerconteofinal";
-									String result=vins.main(codigo, marbete,conteo,atributo);
-									PreparedStatement psinsert = null ;
-									System.out.println("IICIA" +result);
-									if(result.equals("UPDATE")){
-										System.out.println("UPDATE");
-										psinsert = co.prepareStatement("UPDATE tercerconteofinal "
-+ "SET cantidad="+cantidad+" "
-+ "where codigo like '"+codigo+"' "
-+ "and marbete like '"+marbete+"' "
-+ "AND fecha >  now()::DATE - CAST('4 days' AS INTERVAL) "
-+ "AND atributo='"+atributo+"'");
-									}
-									else if(result.equals("INSERT")){
-										System.out.println("INSERT");
-										psinsert = co.prepareStatement("insert into tercerconteofinal values"
-+ "('"+codigo+"','"+atributo+"','"+marbete+"','"+cantidad+"',now(),'"+ubicacion+"','"+almacen+"')");
-									}
-														 							
-								rsupdate = psinsert.executeUpdate();
-							System.out.println("Termine la Insercion------>>>");
-								stmtupdate.close();
-								co.close();
-								
-								System.out.println("Cerre la conexion------>>>");
-								
-								      btnValidar.setEnabled(false); 
-								      JOptionPane.showMessageDialog(contentPane, "Registrado Correctamente");
-								      
-								      dispose();
-								      formularios.tercerconteo tercerconteo = new formularios.tercerconteo();
-										tercerconteo.setVisible(true);
-
-							      
-							    	  
-	
-						  }
-					
-			  
-					
-					
-					  }catch (ClassNotFoundException e) {
-
-					System.out.println("Conexion Fallida DRIVER------>>>");
-
-					e.printStackTrace();
-				} catch (SQLException e) {
-					System.out.println("Conexion BD NO CONECTA------>>>");
-				//	JOptionPane.showMessageDialog(contentPane, "Infomacion Erronea favor de Verificar");
-					
-					e.printStackTrace();
+					txtbuscar.requestFocus();
 				}
-				
-
-			}
-			}
-				 
-				
-		});
+				else if(txtdescripcion.getText().isEmpty())
+				{
+					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique el contenido de Producto");
+					txtcodigo.requestFocus();
+				}
+				else if(txtcantidad.getText().isEmpty())
+				{
+					JOptionPane.showMessageDialog(contentPane, "Error ------>>> Verifique la cantidad");
+					txtcantidad.requestFocus();
+				}
+				else{					
+					String marbete= txtbuscar.getText();
+					String atributo=choice.getSelectedItem(); 
+					String codigo= txtcodigo.getText();
+					double cantidad= Double.parseDouble(txtcantidad.getText());
+					String ubicacion= txtubicacion.getText();
+					String almacen= txtalmacen.getText();					
+					String result1=ValidarTercerConteo.main(marbete);					
+					if(result1.equals("NO"))
+					{					
+						System.out.println("Inicio Insercion------>>>");
+						String conteo="tercerconteofinal";
+						String valor=null;
+						cantidad=cantidad+Double.parseDouble(SumaCantidades.main(marbete,codigo,atributo));					
+						valor=ValidaCantidades.main(marbete, codigo, ""+cantidad,atributo);
+						cantidad= Double.parseDouble(txtcantidad.getText());
+						if(!valor.equals("0")){					
+							JOptionPane.showMessageDialog(contentPane, "VALIDACION ------>>> El conteo coincide con uno de los anteriores");					
+						}																																		
+						else{
+							JOptionPane.showMessageDialog(contentPane, "VERIFICACION ------>>> TU CONTEO NO COINCIDE CON NINGUNO DE LOS ANTERIORES ");											  					   
+							if(usu.equals("japena"))
+							{
+								JOptionPane.showMessageDialog(contentPane, "VERIFICACION ------>>> USUARIO AUTORIZADO PARA REGISTRAR");
+							}    
+							else{					    	
+								JOptionPane.showMessageDialog(contentPane, "VERIFICACION ------>>> PARA CONFIRMAR EL TERCER CONTEO ES NECESARIO USUARIO Y CONTRASEÑA DEL SUPERADMINISTRADOR");
+								String usuario="japena";
+								String contra="JORGE1980";			   
+								String usuario_introducido="";
+								String clave_introducida="";						      
+								while (usuario_introducido.equals(usuario)==false||clave_introducida.equals(contra)==false){
+									usuario_introducido= JOptionPane.showInputDialog("Introduzca su Usuario");
+									clave_introducida = JOptionPane.showInputDialog("Introduzca su Contraseña");						      
+								}
+							}				
+						}						
+						String result=ValidaInsAct.main(codigo, marbete,conteo,atributo);
+						System.out.println("IICIA" +result);													
+						if(result.equals("UPDATE")){
+							System.out.println("UPDATE");
+							Actualizacion.main(conteo,cantidad+"",codigo,marbete,usu,atributo);
+						}
+						else if(result.equals("INSERT")){
+							System.out.println("INSERT");
+							Insersion.main(conteo, cantidad+"", codigo, marbete, usu, ubicacion, almacen,atributo);						
+						}											 																			
+						JOptionPane.showMessageDialog(contentPane, "Registrado Correctamente");
+						dispose();
+						formularios.tercerconteo tercerconteo = new formularios.tercerconteo();
+						tercerconteo.setVisible(true);				
+					}
+					else{
+						JOptionPane.showMessageDialog(contentPane, "ERROR: UBICACION REGISTRADA EN INVENTARIO FINAL");	
+						dispose();
+						formularios.tercerconteo tercerconteo = new formularios.tercerconteo();
+						tercerconteo.setVisible(true);
+					}				
+				}				
+			}			 			
+		});		
+		JLabel lblAtibuto = new JLabel("Atributo:");
+		lblAtibuto.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblAtibuto.setForeground(Color.WHITE);
+		lblAtibuto.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblAtibuto.setBounds(445, 203, 63, 19);
+		contentPane.add(lblAtibuto);
 		btnConfirmarConteo.setFont(new Font("Dialog", Font.PLAIN, 14));
 		btnConfirmarConteo.setVerticalAlignment(SwingConstants.TOP);
 		btnConfirmarConteo.setBounds(342, 374, 155, 28);
 		contentPane.add(btnConfirmarConteo);
 		
-		JLabel lblAtributo = new JLabel("Atributo:");
-		lblAtributo.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblAtributo.setForeground(Color.WHITE);
-		lblAtributo.setFont(new Font("Dialog", Font.PLAIN, 14));
-		lblAtributo.setBounds(481, 286, 63, 19);
-		contentPane.add(lblAtributo);
-		
-		
-		
 		JLabel lblNewLabel_5 = new JLabel("");
 		lblNewLabel_5.setIcon(new ImageIcon(tercerconteo.class.getResource("/imagenes/fondo.jpg")));
 		lblNewLabel_5.setBounds(0, 0, 855, 429);
 		contentPane.add(lblNewLabel_5);
-		
-		
-		
-		
 	}
 }

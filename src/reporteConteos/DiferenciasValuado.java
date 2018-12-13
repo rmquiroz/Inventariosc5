@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import utilerias.postgresql;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
@@ -24,19 +25,14 @@ import jxl.write.biff.RowsExceededException;
 public class DiferenciasValuado 
 {
 	static String mensaje;
-	//static String inventarios="jdbc:postgresql://201.149.89.164:5932/inventarios";
-	//static String productivo="jdbc:postgresql://201.149.89.163:5932/openbravo";
-	static String inventarios="jdbc:postgresql://10.1.250.24:5932/inventarios_c5";
-	static String usuario="postgres",contra="s3st2m1s4e";
-	static String productivo="jdbc:postgresql://10.1.250.20:5932/openbravo";
 	static Date date = new Date();
 	static DateFormat hourFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 	public static String main(String almacenes, String repositorio){
 		
 		try {
 			Class.forName("org.postgresql.Driver");
-		Connection cn = DriverManager.getConnection(inventarios, usuario, contra);		  
-		Connection co = DriverManager.getConnection(productivo, usuario, contra);
+		Connection cn = postgresql.getConexion();		  
+		Connection co = postgresql.getConexionOpen();
 		String[] almacen;
 		int h=0;
 		  System.out.println("Ejecutando Query.......");

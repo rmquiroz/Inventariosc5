@@ -1,6 +1,5 @@
 package formularios;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -17,13 +16,20 @@ import javax.swing.JMenu;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.ImageIcon;
-import java.awt.SystemColor;
-import javax.swing.SwingConstants;
-import java.awt.Insets;
 
+import javax.swing.ImageIcon;
+
+import java.awt.SystemColor;
+
+import javax.swing.SwingConstants;
+
+import java.awt.Insets;
 public class inicio extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 	/**
@@ -81,7 +87,7 @@ public class inicio extends JFrame {
 		
 		mnArchivo.add(mntmSalir);
 		
-		JMenu mnCapturaDeInventario = new JMenu("Inventario     ");
+		JMenu mnCapturaDeInventario = new JMenu("Inventario");
 		mnCapturaDeInventario.setFont(new Font("Dialog", Font.PLAIN, 14));
 		menuBar.add(mnCapturaDeInventario);
 		
@@ -341,7 +347,15 @@ public class inicio extends JFrame {
 		lblNewLabel.setBounds(0, 0, 855, 408);
 		contentPane.add(lblNewLabel);
 		
-		JLabel label = new JLabel("1.-Seleccionar el Menu \"Inventario\"---\"Paralizar Inventario\"");
+		
+		
+		usuarios.usuario gestionusuario = new usuarios.usuario();
+		String usu = gestionusuario.getUsuario();
+		System.out.println("Usuario: "+usu);
+		
+		
+		
+		JLabel label = new JLabel("\n1.-Seleccionar el Menu \"Inventario\"---\"Paralizar Inventario\"");
 		label.setForeground(Color.WHITE);
 		label.setFont(new Font("Dialog", Font.PLAIN, 14));
 		label.setBounds(10, 190, 422, 31);

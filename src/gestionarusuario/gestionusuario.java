@@ -29,14 +29,15 @@ public class gestionusuario {
 				rs = pst.executeQuery();
 				
 				while(rs.next()){
-					usuario=new usuario(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5));
-					nivel=rs.getString(6);
+					usuario=new usuario(rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6));
+					nivel=rs.getString(7);
 					
 				}
 				con.close();
 								
 	} catch (Exception e) {
 		System.out.println("error en obtener usuario");
+		System.out.println("Usu,con");	
 	}
 		
 		return(nivel);

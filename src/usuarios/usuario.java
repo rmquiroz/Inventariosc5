@@ -1,11 +1,11 @@
 package usuarios;
 public class usuario {
 
-	private String usuario;
-	private String nombre;
-	private String apellido;
-	private String pass;
-	private String depto;
+	static public String usuario;
+	static public String nombre;
+	static public String apellido;
+	static public String pass;
+	static public String depto;
 
 	public usuario(String usuario, String nombre, String apellido, String pass,
 			String depto) {
