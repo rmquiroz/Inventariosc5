@@ -235,8 +235,7 @@ public class inventario
 			  }
 			  br.close();
 			  mensaje="Carga exitosa";
-			  ActivaAtributos.main();
-			  /*
+			  ActivaAtributos.main();			  
 			  String recipient = "rquiroz@4eglobal.com lmartinez@4eglobal.com";			  
 			  String direcciones[]=recipient.split(" ");
 			  System.out.println(""+direcciones.length);
@@ -255,8 +254,7 @@ public class inventario
 				  e.printStackTrace();
 			  }
 			  resultMessage = "The e-mail was sent successfully";
-			  System.out.println("Enviado"+alm);
-			  */
+			  System.out.println("Enviado"+alm);			  
 		  }
 		  else
 		  {
